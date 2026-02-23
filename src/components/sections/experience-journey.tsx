@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { motion, AnimatePresence } from "framer-motion";
 import { Briefcase, X, MapPin, Calendar, CheckCircle2, GraduationCap } from "lucide-react";
 import { experiences, Experience, education } from "@/data/profile";
+import posthog from "posthog-js";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -43,6 +44,15 @@ export function ExperienceJourney() {
       document.body.style.overflow = "";
     };
   }, [selectedExp]);
+
+  const handleExperienceClick = (exp: Experience) => {
+    posthog.capture("experience_modal_opened", {
+      company: exp.company,
+      role: exp.role,
+      period: exp.period,
+    });
+    setSelectedExp(exp);
+  };
 
   // Reverse to show oldest first
   const reversedExperiences = [...experiences].reverse();
@@ -233,7 +243,7 @@ export function ExperienceJourney() {
                 key={exp.id}
                 exp={exp}
                 isLeft={isLeft}
-                onClick={() => setSelectedExp(exp)}
+                onClick={() => handleExperienceClick(exp)}
               />
             );
           })}

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Groq from "groq-sdk";
 import resumeContext from "@/data/resume-context";
+import { trackEvent } from "@/lib/posthog-server";
 
 /**
  * Chat API endpoint using Groq (free, fast LLM)
@@ -28,6 +29,8 @@ ${resumeContext}
 Remember: You are representing Kaneshwar. Answer as if you are his AI assistant helping visitors learn about his experience.`;
 
 export async function POST(request: Request) {
+  const visitorId = request.headers.get("x-forwarded-for") || "anonymous";
+  
   try {
     const body = await request.json();
     const message = body?.message;
@@ -39,6 +42,12 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    // Track AI assistant question
+    await trackEvent(visitorId, "ai_assistant_question", {
+      question: message.substring(0, 100),
+      question_length: message.length,
+    });
 
     if (!groq) {
       return NextResponse.json(
@@ -105,6 +114,12 @@ export async function POST(request: Request) {
 
   } catch (error) {
     console.error("Chat API error:", error);
+    
+    // Track AI assistant error
+    await trackEvent(visitorId, "ai_assistant_error", {
+      error: error instanceof Error ? error.message : "Unknown error",
+    });
+    
     return NextResponse.json(
       { response: "Sorry, I encountered an error. Please try again." },
       { status: 200 }

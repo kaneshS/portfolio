@@ -13,6 +13,7 @@ import {
   Loader2,
 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import posthog from "posthog-js";
 
 interface Message {
   id: string;
@@ -67,6 +68,13 @@ export default function AIPage() {
       role: "user",
       content: messageText.trim(),
     };
+
+    // Track AI question asked
+    posthog.capture("ai_question_asked", {
+      question: messageText.trim().substring(0, 100),
+      question_length: messageText.trim().length,
+      is_suggested: suggestedQuestions.includes(messageText.trim()),
+    });
 
     const assistantMessageId = (Date.now() + 1).toString();
     const startTime = Date.now();
@@ -255,6 +263,10 @@ export default function AIPage() {
 
   const sendErrorReport = useCallback(async () => {
     setReportStatus("sending");
+    
+    // Track error report submission
+    posthog.capture("ai_error_reported");
+    
     try {
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",

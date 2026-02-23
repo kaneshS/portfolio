@@ -9,6 +9,7 @@ import { Section, SectionHeader } from "@/components/ui/section";
 import { Badge } from "@/components/ui/badge";
 import { projects, type Project } from "@/data/profile";
 import { Mermaid } from "@/components/ui/mermaid";
+import posthog from "posthog-js";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -238,6 +239,14 @@ function ProjectModal({
 export function Projects() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
+  const handleProjectClick = (project: Project) => {
+    posthog.capture("project_modal_opened", {
+      project_id: project.id,
+      project_title: project.title,
+    });
+    setSelectedProject(project);
+  };
+
   return (
     <Section id="projects">
       <SectionHeader
@@ -251,7 +260,7 @@ export function Projects() {
             key={project.id}
             project={project}
             index={index}
-            onClick={() => setSelectedProject(project)}
+            onClick={() => handleProjectClick(project)}
           />
         ))}
       </div>

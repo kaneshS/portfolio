@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
 import { CursorGlow } from "@/components/cursor-glow";
+import { PostHogProvider } from "@/components/posthog-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -39,9 +40,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <CursorGlow />
-        <Navigation />
-        <main>{children}</main>
+        <PostHogProvider>
+          <CursorGlow />
+          <Navigation />
+          <main>{children}</main>
+        </PostHogProvider>
       </body>
     </html>
   );
