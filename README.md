@@ -83,11 +83,6 @@ src/
 - **AI Assistant** - Chat interface for portfolio Q&A
 - **Contact** - Contact form and social links
 
-## Deployment
-
-Deploy easily on Vercel:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/kaneshS/portfolio)
 
 ## License
 
