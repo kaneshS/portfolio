@@ -1,0 +1,144 @@
+{
+    "personal_info": {
+      "name": "Kaneshwar Sharma",
+      "phone": "+91-9868825809",
+      "email": "mansotra10sharma@gmail.com",
+      "profiles": {
+        "linkedin": "https://linkedin.com/in/kaneshwar",
+        "github": "https://github.com/kaneshS",
+        "medium": "https://medium.com/@mansotra99",
+        "whatsapp": "https://wa.link/mbvszx"
+      }
+    },
+    "work_experience": [
+      {
+        "company": "Intract",
+        "location": null,
+        "role": "Senior Backend Engineer (SDE-III)",
+        "start_date": "March 2024",
+        "end_date": "Present",
+        "responsibilities": [
+          "Designed and implemented a multi-region deployment on GCP using Managed Instance Groups with autoscaling behind a Global HTTP(S) Load Balancer",
+          "Built Terraform scripts for infrastructure formation stacks and managed Docker Registry and HashiCorp Vault for secrets",
+          "Optimized backend performance and cloud costs through gzip compression, query indexing, caching, and instance right-sizing, achieving 50% faster response times and 40% cost reduction",
+          "Built Ball-E, an AI-powered Web3 assistant using orchestrator pattern with specialized agents for personalized blockchain insights, wallet context, and real-time Web3 queries",
+          "Implemented Pinecone-based RAG layer with OpenAI embeddings, metadata filtering for user data isolation, and query expansion for improved semantic search accuracy",
+          "Designed agentic AI architecture routing user intents to specialized agents (document insights, Web3 queries, web search, social workflows) using Vercel AI SDK and LangChain",
+          "Built real-time streaming responses using SSE, MongoDB for conversation storage, and Redis for session caching",
+          "Led infrastructure migration from AWS to GCP",
+          "Built and launched Intract Rewind by aggregating data from 16 blockchain sources, generating over $600K revenue in two weeks"
+        ]
+      },
+      {
+        "company": "Intract",
+        "location": null,
+        "role": "Consultant / Software Engineer",
+        "start_date": "January 2024",
+        "end_date": "March 2024",
+        "responsibilities": [
+          "Built backend for a Telegram Mini App serving around 5 million users",
+          "Handled daily load of 40K users using AWS Kinesis and Lambda for near real-time processing",
+          "Designed unit and integration tests and implemented CI/CD pipelines using GitHub Actions and Docker"
+        ]
+      },
+      {
+        "company": "Spyne.ai",
+        "location": "Gurgaon, Haryana",
+        "role": "Senior Software Engineer (SDE-2)",
+        "start_date": "March 2021",
+        "end_date": "January 2024",
+        "responsibilities": [
+          "Engineered a Kafka-based microservice architecture for AI image processing handling 200K+ images per day with multiple consumer groups for parallel processing",
+          "Built a custom autoscaling controller that monitors Kafka topic lag, consumer throughput, and processing latency to dynamically scale worker pods, reducing infrastructure costs by 35%",
+          "Designed and maintained FastAPI-based external APIs serving 50+ global enterprise clients including automotive dealers and e-commerce platforms",
+          "Led a team of 3 engineers to design API architecture, database models, and OpenAPI documentation with versioned endpoints",
+          "Implemented Redis caching layer reducing database load by 60% and improving API response times from 500ms to under 100ms",
+          "Built complete backend infrastructure for mobile teams (Android & iOS) with real-time image processing status updates",
+          "Progressed from junior engineer to senior to team lead, mentoring new hires and conducting code reviews",
+          "Set up monitoring and alerting using Prometheus and Grafana for proactive incident management"
+        ]
+      },
+      {
+        "company": "Appsuccessor",
+        "location": null,
+        "role": "Software Engineer",
+        "start_date": "September 2020",
+        "end_date": "March 2021",
+        "responsibilities": [
+          "Built automated scripts to replicate and monitor third-party API data streams",
+          "Developed REST APIs and web scraping bots to automate marketing analytics data collection"
+        ]
+      }
+    ],
+    "projects": [
+      {
+        "name": "WebSocket with Redis Pub/Sub",
+        "description": "Real-time communication system using Redis Pub/Sub for backend event distribution and WebSocket streaming for scalable LLM response delivery",
+        "features": [
+          "Horizontally scalable WebSocket architecture",
+          "Redis Pub/Sub for cross-instance message broadcasting",
+          "Real-time LLM response streaming with chunked delivery",
+          "Connection pooling and automatic reconnection handling",
+          "Sub-50ms latency for message propagation"
+        ],
+        "technologies": ["Node.js", "WebSocket", "Redis Pub/Sub", "TypeScript", "Docker"],
+        "use_case": "Enables real-time AI chat experiences where multiple server instances can broadcast LLM responses to connected clients without sticky sessions"
+      }
+    ],
+    "skills": {
+      "languages": ["Python", "TypeScript", "JavaScript"],
+      "frameworks": ["FastAPI", "Flask", "React.js", "ExpressJS", "Node.js"],
+      "databases": ["PostgreSQL", "MySQL", "MongoDB", "Redis"],
+      "devops_cloud": [
+        "AWS (SQS, Kinesis, RDS, EC2, Lambda)",
+        "GCP (PubSub, VM, SQL, Cloud Run)",
+        "Docker",
+        "Terraform",
+        "CI/CD",
+        "Nginx",
+        "Fluentd",
+        "HashiCorp Vault",
+        "Kafka"
+      ]
+    },
+    "education": {
+      "institution": "Guru Gobind Singh Indraprastha University",
+      "degree": "Bachelor of Technology",
+      "location": "Delhi, India",
+      "start_year": 2016,
+      "end_year": 2020
+    },
+    "freelance_projects": [
+      {
+        "client": "Stealth AI Gaming Startup",
+        "title": "Tech Lead - AI-Powered WebGL Game Platform",
+        "period": "Nov 2023",
+        "description": "Led cross-functional engineering teams at a stealth startup building an AI-powered platform that generates WebGL games from natural language prompts.",
+        "deliverables": [
+          "Led frontend, backend, and AI engineering teams",
+          "Established communication channels between engineering, product, and CEO",
+          "Streamlined development processes and workflows",
+          "Architected the backend infrastructure for AI game generation",
+          "Coordinated cross-team collaboration for seamless integration"
+        ],
+        "technologies": ["FastAPI", "WebGL", "AI/ML", "Python", "Cloud Infrastructure"],
+        "outcome": "Successfully built and shipped AI-to-game generation pipeline"
+      },
+      {
+        "client": "Personal Project",
+        "title": "Interactive Portfolio with AI Assistant",
+        "period": "2024",
+        "description": "Built a modern, interactive portfolio website featuring an embedded AI assistant powered by RAG that answers questions about my experience and projects.",
+        "deliverables": [
+          "Next.js 14 App Router with TypeScript",
+          "AI chatbot with Groq LLM and RAG pipeline",
+          "Harry Potter-themed UI with GSAP animations",
+          "Interactive experience timeline with footstep animations",
+          "Responsive design with custom cursor effects"
+        ],
+        "technologies": ["Next.js", "TypeScript", "Tailwind CSS", "GSAP", "Groq API", "Framer Motion"],
+        "outcome": "Unique portfolio showcasing technical skills with an AI-powered personal assistant"
+      }
+    ]
+  }
+  

@@ -1,27 +1,140 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Harry Potter Light Theme - Parchment, Forest Green & Brown */
+    --background: 252 250 245; /* Warm parchment white */
+    --foreground: 62 47 35; /* Dark brown */
+    --muted: 245 240 230; /* Light parchment */
+    --muted-foreground: 120 100 80; /* Muted brown */
+    --border: 210 190 160; /* Light brown border */
+    --accent: 30 81 40; /* Forest green - Slytherin inspired */
+    --accent-foreground: 252 250 245; /* Parchment white */
+    --card: 255 253 248; /* Bright parchment */
+    --card-foreground: 62 47 35; /* Dark brown */
+    
+    /* Additional HP colors */
+    --gold: 184 134 11; /* Gryffindor gold */
+    --maroon: 116 47 50; /* Deep maroon */
+    --forest: 30 81 40; /* Forest green */
+    --sepia: 139 90 43; /* Sepia brown */
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Crimson Text', Georgia, serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cinzel', Georgia, serif;
+    letter-spacing: 0.02em;
+  }
+
+  ::selection {
+    background: rgb(30 81 40 / 0.2);
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-card/90 backdrop-blur-sm border border-border/50;
+  }
+
+  .focus-ring {
+    @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  /* Parchment texture effect */
+  .parchment {
+    background: linear-gradient(
+      135deg,
+      rgb(252 250 245) 0%,
+      rgb(248 244 235) 50%,
+      rgb(252 250 245) 100%
+    );
+  }
+
+  /* Magical glow effect */
+  .magic-glow {
+    box-shadow: 0 0 20px rgb(30 81 40 / 0.15),
+                0 0 40px rgb(184 134 11 / 0.1);
+  }
+
+  /* Vintage border */
+  .vintage-border {
+    border: 2px solid rgb(210 190 160);
+    box-shadow: inset 0 0 10px rgb(139 90 43 / 0.1);
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
+
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+
+  /* Gold text */
+  .text-gold {
+    color: rgb(184 134 11);
+  }
+
+  /* Sepia text */
+  .text-sepia {
+    color: rgb(139 90 43);
+  }
+}
+
+/* Custom scrollbar - vintage style */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(245 240 230);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(180 160 130);
+  border-radius: 5px;
+  border: 2px solid rgb(245 240 230);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(139 90 43);
+}
+
+/* Mermaid diagram override for light theme */
+.mermaid-container {
+  background: rgb(248 244 235) !important;
+}
+
+.mermaid-container svg {
+  max-width: 100%;
 }
