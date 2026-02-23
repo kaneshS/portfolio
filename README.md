@@ -2,6 +2,8 @@
 
 A modern, interactive portfolio website featuring an embedded AI assistant powered by RAG (Retrieval-Augmented Generation) that answers questions about my experience and projects.
 
+**Live Site:** [https://kaneshwar.vercel.app](https://kaneshwar.vercel.app/)
+
 ## Features
 
 - **AI Assistant** - Embedded chatbot using Groq LLM with RAG pipeline for personalized responses
