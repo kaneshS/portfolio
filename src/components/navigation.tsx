@@ -18,6 +18,7 @@ const navItems = [
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showThemeNudge, setShowThemeNudge] = useState(false);
   const { theme, toggleTheme, mounted } = useTheme();
 
   useEffect(() => {
@@ -28,6 +29,41 @@ export function Navigation() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Show theme nudge on first visit
+  useEffect(() => {
+    if (!mounted) return;
+    
+    const hasSeenNudge = localStorage.getItem("theme-nudge-seen");
+    if (!hasSeenNudge) {
+      const timer = setTimeout(() => {
+        setShowThemeNudge(true);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [mounted]);
+
+  // Auto-dismiss nudge after 5 seconds
+  useEffect(() => {
+    if (showThemeNudge) {
+      const timer = setTimeout(() => {
+        dismissNudge();
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [showThemeNudge]);
+
+  const dismissNudge = () => {
+    setShowThemeNudge(false);
+    localStorage.setItem("theme-nudge-seen", "true");
+  };
+
+  const handleThemeToggle = () => {
+    toggleTheme();
+    if (showThemeNudge) {
+      dismissNudge();
+    }
+  };
 
   return (
     <>
@@ -61,9 +97,9 @@ export function Navigation() {
               </li>
             ))}
             {/* Theme Toggle */}
-            <li>
+            <li className="relative">
               <button
-                onClick={toggleTheme}
+                onClick={handleThemeToggle}
                 className="p-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors focus-ring"
                 aria-label="Toggle theme"
               >
@@ -77,27 +113,67 @@ export function Navigation() {
                   <div className="w-5 h-5" />
                 )}
               </button>
+              
+              {/* Theme Nudge Tooltip - Desktop */}
+              <AnimatePresence>
+                {showThemeNudge && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -10, scale: 0.9 }}
+                    className="absolute top-full right-0 mt-3 w-48 p-3 rounded-xl bg-card border border-border shadow-xl z-50"
+                    onClick={dismissNudge}
+                  >
+                    <div className="absolute -top-2 right-4 w-4 h-4 rotate-45 bg-card border-l border-t border-border" />
+                    <p className="text-sm text-foreground relative z-10">
+                      Switch between <span className="text-accent font-medium">dark</span> and <span className="text-accent font-medium">light</span> mode
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">Click to dismiss</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </li>
           </ul>
 
           {/* Mobile Menu Button */}
           <div className="flex items-center gap-2 md:hidden">
             {/* Mobile Theme Toggle */}
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors focus-ring"
-              aria-label="Toggle theme"
-            >
-              {mounted ? (
-                theme === "light" ? (
-                  <Moon className="w-5 h-5 text-muted-foreground" />
+            <div className="relative">
+              <button
+                onClick={handleThemeToggle}
+                className="p-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors focus-ring"
+                aria-label="Toggle theme"
+              >
+                {mounted ? (
+                  theme === "light" ? (
+                    <Moon className="w-5 h-5 text-muted-foreground" />
+                  ) : (
+                    <Sun className="w-5 h-5 text-muted-foreground" />
+                  )
                 ) : (
-                  <Sun className="w-5 h-5 text-muted-foreground" />
-                )
-              ) : (
-                <div className="w-5 h-5" />
-              )}
-            </button>
+                  <div className="w-5 h-5" />
+                )}
+              </button>
+              
+              {/* Theme Nudge Tooltip - Mobile */}
+              <AnimatePresence>
+                {showThemeNudge && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10, scale: 0.9 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -10, scale: 0.9 }}
+                    className="absolute top-full right-0 mt-3 w-44 p-3 rounded-xl bg-card border border-border shadow-xl z-50"
+                    onClick={dismissNudge}
+                  >
+                    <div className="absolute -top-2 right-3 w-4 h-4 rotate-45 bg-card border-l border-t border-border" />
+                    <p className="text-sm text-foreground relative z-10">
+                      Toggle <span className="text-accent font-medium">theme</span>
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">Tap to dismiss</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-2 -mr-2 focus-ring rounded"
