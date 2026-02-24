@@ -13,6 +13,7 @@ export const profile = {
   github: "https://github.com/kaneshS",
   medium: "https://medium.com/@mansotra99",
   whatsapp: "https://wa.link/mbvszx",
+  resume: "https://drive.google.com/file/d/13RVrKZPUy_jR0yrSQD6wnJFJdU51hUw-/view?usp=sharing",
   aboutMe: `I'm a Senior Backend Engineer with 5+ years of experience building distributed systems that handle scale with elegance. From Kafka-based microservices processing 200K+ images daily to Telegram bots serving 5 million users, I've architected solutions that solve real-world challenges.
 
 My journey in tech has taken me from building automated data pipelines to leading infrastructure migrations from AWS to GCP. I thrive in environments where complex problems meet elegant solutions, whether that's optimizing cloud costs by 40% or building AI-powered assistants that transform how users interact with Web3.

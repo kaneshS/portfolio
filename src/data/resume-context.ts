@@ -13,6 +13,9 @@ export const resumeContext = `
 - LinkedIn: [linkedin.com/in/kaneshwar](https://linkedin.com/in/kaneshwar)
 - GitHub: [github.com/kaneshS](https://github.com/kaneshS)
 - WhatsApp: [Chat on WhatsApp](https://wa.link/mbvszx)
+- Resume/CV: [Download Resume (PDF)](https://drive.google.com/file/d/13RVrKZPUy_jR0yrSQD6wnJFJdU51hUw-/view?usp=sharing)
+
+**To download Kaneshwar's resume, click here:** [Download Resume](https://drive.google.com/file/d/13RVrKZPUy_jR0yrSQD6wnJFJdU51hUw-/view?usp=sharing)
 
 ## Professional Summary
 Senior Backend Engineer with 5+ years of experience designing and building distributed systems at scale. Specializing in high-performance APIs, event-driven architectures, and cloud-native solutions on AWS and GCP. Passionate about solving complex problems with elegant, maintainable solutions.

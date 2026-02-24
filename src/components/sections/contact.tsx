@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Github, Linkedin, ArrowUpRight, MessageSquare } from "lucide-react";
+import { Mail, Github, Linkedin, ArrowUpRight, MessageSquare, FileText } from "lucide-react";
 import { Section } from "@/components/ui/section";
 import { MotionButton } from "@/components/ui/button";
 import { ContactForm } from "@/components/contact-form";
@@ -62,6 +62,20 @@ export function Contact() {
             <MessageSquare className="w-4 h-4" />
             Get in Touch
           </MotionButton>
+          <a
+            href={profile.resume}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <MotionButton 
+              size="lg" 
+              variant="secondary"
+              className="gap-2"
+            >
+              <FileText className="w-4 h-4" />
+              Download Resume
+            </MotionButton>
+          </a>
         </motion.div>
 
         <motion.div
