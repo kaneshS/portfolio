@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useTheme } from "@/components/theme-provider";
 
 const navItems = [
   { label: "About", href: "/#about" },
@@ -17,6 +18,8 @@ const navItems = [
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const { theme, toggleTheme, mounted } = useTheme();
+
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
@@ -57,20 +60,56 @@ export function Navigation() {
                 </Link>
               </li>
             ))}
+            {/* Theme Toggle */}
+            <li>
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors focus-ring"
+                aria-label="Toggle theme"
+              >
+                {mounted ? (
+                  theme === "light" ? (
+                    <Moon className="w-5 h-5 text-muted-foreground" />
+                  ) : (
+                    <Sun className="w-5 h-5 text-muted-foreground" />
+                  )
+                ) : (
+                  <div className="w-5 h-5" />
+                )}
+              </button>
+            </li>
           </ul>
 
           {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden p-2 -mr-2 focus-ring rounded"
-            aria-label="Toggle menu"
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-5 h-5" />
-            ) : (
-              <Menu className="w-5 h-5" />
-            )}
-          </button>
+          <div className="flex items-center gap-2 md:hidden">
+            {/* Mobile Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="p-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors focus-ring"
+              aria-label="Toggle theme"
+            >
+              {mounted ? (
+                theme === "light" ? (
+                  <Moon className="w-5 h-5 text-muted-foreground" />
+                ) : (
+                  <Sun className="w-5 h-5 text-muted-foreground" />
+                )
+              ) : (
+                <div className="w-5 h-5" />
+              )}
+            </button>
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 -mr-2 focus-ring rounded"
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-5 h-5" />
+              ) : (
+                <Menu className="w-5 h-5" />
+              )}
+            </button>
+          </div>
         </nav>
       </motion.header>
 

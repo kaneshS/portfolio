@@ -410,7 +410,7 @@ export default function AIPage() {
                       <div className={`text-sm leading-relaxed ${
                         message.role === "user" 
                           ? "text-white" 
-                          : "prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-li:my-0 prose-strong:text-foreground prose-a:text-accent prose-a:no-underline hover:prose-a:underline"
+                          : "prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-ul:my-1 prose-li:my-0 prose-strong:text-foreground prose-a:text-accent prose-a:no-underline hover:prose-a:underline"
                       }`}>
                         {message.role === "assistant" ? (
                           <ReactMarkdown
