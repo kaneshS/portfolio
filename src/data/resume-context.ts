@@ -29,24 +29,23 @@ Key Responsibilities & Achievements:
 - Designed and implemented a multi-region deployment on GCP using Managed Instance Groups with autoscaling behind a Global HTTP(S) Load Balancer
 - Built Terraform scripts for infrastructure formation stacks and managed Docker Registry and HashiCorp Vault for secrets
 - Optimized backend performance and cloud costs through gzip compression, query indexing, caching, and instance right-sizing, achieving 50% faster response times and 40% cost reduction
-- Built Ball-E, an AI-powered Web3 assistant using orchestrator pattern with specialized agents for personalized blockchain insights, wallet context, and real-time Web3 queries
-- Implemented Pinecone-based RAG layer with OpenAI embeddings, metadata filtering for strict user data isolation, and query expansion for improved semantic search accuracy
-- Designed agentic AI architecture routing user intents to specialized agents (document insights, Web3 queries, web search, social workflows) using Vercel AI SDK and LangChain
-- Built real-time streaming responses using Server-Sent Events (SSE), MongoDB for conversation storage, and Redis for session caching
+- Built Ball-E, an AI-powered Web3 query assistant in Go using Vercel AI SDK with agentic orchestration to deliver personalized blockchain insights, wallet-related context, and real-time information
+- Implemented Pinecone-based RAG for semantic search over user data embeddings, enabling context-aware crypto insights with metadata filtering for user data isolation
+- Optimized SSE real-time streaming with scalable Go backend infrastructure for fast, responsive conversational UX
 - Led infrastructure migration from AWS to GCP
 - Built and launched Intract Rewind by aggregating data from 16 blockchain sources, generating over $600K revenue in two weeks
 
-Technologies: GCP, Terraform, Docker, Pinecone, OpenAI, Vercel AI SDK, LangChain, Node.js, TypeScript, MongoDB, Redis
+Technologies: Go, GCP, Terraform, Docker, Pinecone, OpenAI, Vercel AI SDK, LangChain, TypeScript, MongoDB, Redis
 
 ### Intract - Consultant / Software Engineer
 **January 2024 - March 2024**
 
 Key Responsibilities & Achievements:
-- Built backend for a Telegram Mini App serving around 5 million users
-- Handled daily load of 40K users using AWS Kinesis and Lambda for near real-time processing
+- Built robust Go backend for Telegram Mini App (Tap Tap game) serving around 5 million users
+- Handled daily load of 40K+ users by utilizing AWS Kinesis with Lambda functions for near real-time processing
 - Designed unit and integration tests and implemented CI/CD pipelines using GitHub Actions and Docker
 
-Technologies: AWS Kinesis, AWS Lambda, Node.js, Docker, GitHub Actions, TypeScript, MongoDB
+Technologies: Go, AWS Kinesis, AWS Lambda, Docker, GitHub Actions, MongoDB
 
 ### Spyne.ai - Senior Software Engineer (SDE-2)
 **March 2021 - January 2024** | Gurgaon, Haryana
@@ -138,21 +137,22 @@ Technologies: Python, REST APIs, Web Scraping, Automation
 - Generated $600K+ revenue in 2 weeks
 - Built data pipelines for collecting and normalizing blockchain activity
 
-### 2. Telegram Mini App Backend
-- Served 5 million users with 40K daily active users
-- Real-time processing with AWS Kinesis and Lambda
-- 99.9% availability 
-- built backend with Go and MongoDB
+### 2. Telegram Mini App Backend (Go)
+- Built robust Go backend for Tap Tap game serving 5 million users
+- Handled 40K+ daily active users with AWS Kinesis and Lambda for near real-time processing
+- 99.9% availability with scalable architecture
+- Technologies: Go, AWS Kinesis, Lambda, MongoDB
 
 ### 3. AI Image Processing Pipeline (Spyne.ai)
 - Kafka-based microservices processing 200K+ images/day
 - Custom autoscaling based on topic lag
 - Serving 50+ global enterprise clients
 
-### 4. AI-Powered Web3 Assistant
-- Built with Vercel AI SDK
-- Custom agents for Twitter, LinkedIn, MetaMask integration
-- ChromaDB for vector search and personalization
+### 4. Ball-E: AI-Powered Web3 Assistant (Go)
+- Built in Go with Vercel AI SDK and agentic orchestration
+- Delivers personalized blockchain insights, wallet context, and real-time Web3 information
+- Pinecone-based RAG for semantic search over user data embeddings
+- SSE real-time streaming with scalable Go backend for responsive conversational UX
 
 ### 5. WebSocket + Redis Pub/Sub System
 - Real-time LLM response streaming with chunked delivery
