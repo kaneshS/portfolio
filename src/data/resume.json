@@ -1,6 +1,6 @@
 {
   "name": "Kaneshwar Sharma",
-  "title": "Senior Backend Engineer",
+  "title": "Senior Full-Stack Engineer",
   "headline": "Senior Software Engineer | Python & FastAPI | Go | MySQL & PostgreSQL | Microservices | AWS & GCP",
   "location": "Gurugram, India",
   "phone": "+91-9868825809",
@@ -13,7 +13,7 @@
     "portfolio": "https://kaneshwar.vercel.app",
     "resume": "/Kaneshwar_Sharma.pdf"
   },
-  "summary": "Backend-focused senior software engineer who builds Python (FastAPI) and Go REST APIs, event-driven microservices, and data pipelines on Linux, AWS, and GCP. At Spyne.ai, was promoted to SDE-II and team lead of 3 within 13 months, and shipped FastAPI APIs with API-key authentication for 50+ enterprise clients, JWT authentication for its web and mobile apps, and a Kafka pipeline processing 200K+ images/day. At Intract, a Web3 platform, built the backend for a multi-chain analytics launch that generated $600K+ in NFT mint revenue within 2 weeks. Writes unit tests against mocked dependencies (pytest, unittest.mock) behind CI coverage gates; also works in TypeScript, with early-career production React/Next.js experience.",
+  "summary": "Senior full-stack engineer who builds Python (FastAPI) and Go REST APIs, event-driven microservices, and data pipelines on Linux, AWS, and GCP, with React and Next.js front ends on top. At Spyne.ai, was promoted to SDE-II and team lead of 3 within 13 months, and shipped FastAPI APIs with API-key authentication for 50+ enterprise clients, JWT authentication for its web and mobile apps, and a Kafka pipeline processing 200K+ images/day. At Intract, a Web3 platform, built the backend for a multi-chain analytics launch that generated $600K+ in NFT mint revenue within 2 weeks. Writes unit tests against mocked dependencies (pytest, unittest.mock) behind CI coverage gates; ships the UI too, in TypeScript with React and Next.js.",
   "experience": [
     {
       "id": "turing",

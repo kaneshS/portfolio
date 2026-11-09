@@ -40,12 +40,12 @@ export function Hero() {
           <div className="lg:col-span-6">
             <p className="inline-flex items-center gap-2 text-sm text-text-soft" style={{ animation: "fade-in 600ms ease both" }}>
               <span className="w-2 h-2 rounded-full bg-accent pulse-dot" aria-hidden="true" />
-              Open to senior backend roles · Gurugram / remote
+              Open to senior engineering roles · Gurugram / remote
             </p>
 
             <h1 id="hero-title" className="mt-5 text-[clamp(2.75rem,6.4vw,5rem)]">
               <span className="reveal block">
-                <span className="block" style={{ ["--i" as string]: 1 }}>Backends that</span>
+                <span className="block" style={{ ["--i" as string]: 1 }}>Products that</span>
               </span>
               <span className="reveal block">
                 <span className="block" style={{ ["--i" as string]: 2 }}>
@@ -56,7 +56,7 @@ export function Hero() {
 
             <div className="reveal mt-6">
               <p className="text-text-soft text-lg md:text-xl max-w-[46ch]" style={{ ["--i" as string]: 3 }}>
-                Senior backend engineer. Python and Go services, event-driven pipelines, and the AWS and GCP infrastructure under them.
+                Senior full-stack engineer. Python and Go services, event-driven pipelines, React and Next.js in front, AWS and GCP underneath.
               </p>
             </div>
 

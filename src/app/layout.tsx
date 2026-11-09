@@ -11,10 +11,10 @@ const body = localFont({ src: "./fonts/GeistVF.woff", variable: "--font-body", w
 const mono = localFont({ src: "./fonts/GeistMonoVF.woff", variable: "--font-mono", weight: "100 900", display: "swap" });
 
 export const metadata: Metadata = {
-  title: "Kaneshwar Sharma | Senior Backend Engineer",
+  title: "Kaneshwar Sharma | Senior Full-Stack Engineer",
   description:
-    "Senior backend engineer. Python and Go services, Kafka pipelines, AWS and GCP infrastructure that hold at scale.",
-  keywords: ["backend engineer", "software engineer", "cloud", "scalable systems", "distributed systems"],
+    "Senior full-stack engineer. Python and Go services, Kafka pipelines, React and Next.js front ends, AWS and GCP infrastructure that hold at scale.",
+  keywords: ["full-stack engineer", "backend engineer", "software engineer", "cloud", "scalable systems", "distributed systems"],
 };
 
 export const viewport: Viewport = {

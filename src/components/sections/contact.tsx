@@ -14,7 +14,7 @@ export function Contact() {
       <div className="max-w-4xl">
         <span className="label">Contact</span>
         <h2 className="mt-3 text-[clamp(2.4rem,6vw,4.5rem)]">Let&rsquo;s build something that holds.</h2>
-        <p className="text-text-soft mt-5 max-w-[50ch] text-lg">Senior backend roles, consulting, or a conversation about a system that is starting to creak. Replies within two days.</p>
+        <p className="text-text-soft mt-5 max-w-[50ch] text-lg">Senior engineering roles, consulting, or a conversation about a system that is starting to creak. Replies within two days.</p>
 
         <div className="mt-8 flex flex-wrap gap-3">
           <button onClick={() => setOpen(true)} className="btn btn-accent" aria-haspopup="dialog">

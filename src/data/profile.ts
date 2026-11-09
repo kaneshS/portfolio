@@ -19,11 +19,11 @@ export const profile = {
   medium: resume.links.medium,
   whatsapp: resume.links.whatsapp,
   resume: resume.links.resume,
-  aboutMe: `I'm a backend-focused senior software engineer who builds Python (FastAPI) and Go REST APIs, event-driven microservices, and data pipelines on Linux, AWS, and GCP. From Kafka pipelines processing 200K+ images a day to a serverless Go backend serving ~5M Telegram users, I've shipped systems that handle real scale.
+  aboutMe: `I'm a senior full-stack engineer who builds Python (FastAPI) and Go REST APIs, event-driven microservices, and data pipelines on Linux, AWS, and GCP, with React and Next.js front ends on top. From Kafka pipelines processing 200K+ images a day to a serverless Go backend serving ~5M Telegram users, I've shipped systems that handle real scale.
 
 At Spyne.ai I was promoted to SDE-II and team lead of 3 within 13 months, shipping FastAPI APIs with API-key auth for 50+ enterprise clients. At Intract, a Web3 platform, I built the backend for a multi-chain analytics launch that generated $600K+ in NFT mint revenue within 2 weeks, and led the AWS-to-GCP migration that cut p95 latency 50% and cloud spend 40%.
 
-Most recently at Turing, I built Go and PostgreSQL services integrating Uber into a Dubai-based super app, and backend APIs for standardized AI/ML training environments. I write unit tests against mocked dependencies behind CI coverage gates, and still reach for TypeScript and Next.js when a project needs a UI.`,
+Most recently at Turing, I built Go and PostgreSQL services integrating Uber into a Dubai-based super app, and backend APIs for standardized AI/ML training environments. I write unit tests against mocked dependencies behind CI coverage gates, and ship the UI in TypeScript, React and Next.js.`,
 };
 
 // Education

@@ -44,7 +44,7 @@ export function Now() {
 
         <article className="card p-6 md:col-span-2 flex flex-col">
           <span className="label">Reach out</span>
-          <p className="mt-3 text-text-soft text-[0.95rem]">Hiring for a senior backend role, or want a second opinion on a system?</p>
+          <p className="mt-3 text-text-soft text-[0.95rem]">Hiring for a senior engineering role, or want a second opinion on a system?</p>
           <Link href="#contact" className="btn btn-line mt-auto self-start !min-h-[40px] !py-1.5 mt-5">
             Say hello <ArrowUpRight className="w-4 h-4" />
           </Link>
