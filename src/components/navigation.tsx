@@ -43,6 +43,9 @@ export function Navigation() {
     };
   }, [open]);
 
+  // /ai has its own top bar
+  if (pathname.startsWith("/ai")) return null;
+
   const ThemeButton = (
     <button
       onClick={toggleTheme}
