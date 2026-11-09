@@ -1,0 +1,126 @@
+{
+  "name": "Kaneshwar Sharma",
+  "title": "Senior Backend Engineer",
+  "headline": "Senior Software Engineer | Python & FastAPI | Go | MySQL & PostgreSQL | Microservices | AWS & GCP",
+  "location": "Gurugram, India",
+  "phone": "+91-9868825809",
+  "email": "mansotra10sharma@gmail.com",
+  "links": {
+    "linkedin": "https://linkedin.com/in/kaneshwar",
+    "github": "https://github.com/kaneshS",
+    "medium": "https://medium.com/@mansotra99",
+    "whatsapp": "https://wa.link/mbvszx",
+    "portfolio": "https://kaneshwar.vercel.app",
+    "resume": "/Kaneshwar_Sharma.pdf"
+  },
+  "summary": "Backend-focused senior software engineer who builds Python (FastAPI) and Go REST APIs, event-driven microservices, and data pipelines on Linux, AWS, and GCP. At Spyne.ai, was promoted to SDE-II and team lead of 3 within 13 months, and shipped FastAPI APIs with API-key authentication for 50+ enterprise clients, JWT authentication for its web and mobile apps, and a Kafka pipeline processing 200K+ images/day. At Intract, a Web3 platform, built the backend for a multi-chain analytics launch that generated $600K+ in NFT mint revenue within 2 weeks. Writes unit tests against mocked dependencies (pytest, unittest.mock) behind CI coverage gates; also works in TypeScript, with early-career production React/Next.js experience.",
+  "experience": [
+    {
+      "id": "turing",
+      "company": "Turing",
+      "role": "Senior Backend Engineer",
+      "start": "Jul 2025",
+      "end": "Jun 2026",
+      "description": "AI model-training work and a client placement with a Dubai-based company building a super app",
+      "stack": ["Go", "PostgreSQL"],
+      "achievements": [
+        "Developed Go and PostgreSQL backend services integrating Uber into the client's super app (OAuth 2.0 account linking, fare estimates, and trip-status webhooks), so users could access Uber rides without leaving the app.",
+        "Built backend APIs that create standardized AI/ML training environments, with consistent data formatting and scalable ingestion pipelines."
+      ]
+    },
+    {
+      "id": "intract",
+      "company": "Intract",
+      "role": "Senior Backend Engineer (SDE-III)",
+      "start": "Jan 2024",
+      "end": "Jul 2025",
+      "description": "Web3 platform: multi-chain user analytics and wallet intelligence. Joined as consultant, converted to full-time.",
+      "stack": ["Python", "TypeScript", "Node.js", "Go", "GCP", "AWS", "MongoDB", "Redis", "ChromaDB", "MetaMask", "Terraform"],
+      "achievements": [
+        "Built the backend for Intract Rewind end-to-end: parallel fetchers plus a normalization/aggregation layer over 16 blockchain data sources that reconstructed each user's on-chain activity history behind an analytics API; the launch generated $600K+ in NFT mint revenue within 2 weeks.",
+        "Led the AWS-to-GCP migration, building the migration tooling in Python, and a multi-region rollout on autoscaling Managed Instance Groups behind a Global HTTP(S) Load Balancer; database indexing, query restructuring, caching, gzip compression, and instance right-sizing cut p95 response times 50% and monthly cloud spend 40%.",
+        "Built the serverless Go backend (API Gateway → Lambda → Kinesis stream processors → MongoDB) for a Telegram Mini App game serving ~5M users (40K+ daily active), with unit and integration tests run in Docker on GitHub Actions CI/CD.",
+        "Shipped a Web3 AI assistant turning MetaMask wallet activity, social profiles, and on-chain data into personalized insights: 5+ intent-routed agents, ChromaDB vector search with per-user data isolation, and SSE streaming.",
+        "Implemented JWT authentication with access and refresh tokens (cookie-based) for the Intract web app's backend APIs.",
+        "Automated infrastructure provisioning with Terraform and a Docker registry, with secrets managed in HashiCorp Vault."
+      ]
+    },
+    {
+      "id": "spyne",
+      "company": "Spyne.ai",
+      "role": "SDE-I → Senior Software Engineer (SDE-II) / Team Lead",
+      "start": "Mar 2021",
+      "end": "Jan 2024",
+      "location": "Gurugram, Haryana",
+      "description": "AI image-processing SaaS for automotive dealers and e-commerce platforms",
+      "stack": ["Python", "FastAPI", "Kafka", "SQS", "MySQL", "SQLAlchemy", "Alembic", "MongoDB", "Redis", "AWS EKS", "Docker", "Prometheus", "Grafana"],
+      "achievements": [
+        "Designed and maintained Python/FastAPI REST APIs for 50+ enterprise clients, with versioned endpoints and OpenAPI docs, and built their API-key authentication end-to-end.",
+        "Worked directly with enterprise clients, product managers, designers, and customer success to understand integration requirements, onboard clients onto the APIs, and resolve integration issues.",
+        "Promoted from SDE-I to SDE-II and team lead of 3 within 13 months (Apr 2022): conducted code reviews, mentored new hires, and led API architecture and MySQL schema design (Alembic migrations).",
+        "Engineered an event-driven microservices pipeline on Kafka (confluent-kafka) and AWS SQS processing 200K+ images/day, using Python multiprocessing to run pipeline workers in parallel across CPU cores.",
+        "Built a custom autoscaling controller that scaled worker pods on AWS EKS by Kafka consumer lag, throughput, and processing latency, cutting infrastructure cost 35%.",
+        "Added a Redis caching layer that reduced database load 60% and API latency from 500ms to under 100ms; set up Prometheus/Grafana monitoring and alerting for incident response.",
+        "Delivered the backend for Spyne's Android/iOS apps with real-time processing-status updates, and JWT authentication (access + refresh tokens) for its web and mobile apps."
+      ]
+    },
+    {
+      "id": "appsuccessor",
+      "company": "Appsuccessor",
+      "role": "Software Engineer",
+      "start": "Sep 2020",
+      "end": "Mar 2021",
+      "description": "Marketing analytics automation",
+      "stack": ["Python", "REST APIs", "Web Scraping"],
+      "achievements": [
+        "Automated replication and monitoring of third-party API data streams, improving the reliability of marketing analytics.",
+        "Developed REST API integrations and web-scraping automation that reduced manual data collection and human error."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "browser-automation",
+      "title": "Browser-Automation Engine",
+      "stack": ["Python", "asyncio", "FastAPI", "Playwright", "React", "TypeScript"],
+      "description": "Automates multi-step job-application forms with async Playwright; FastAPI runs workflows as BackgroundTasks and streams progress over Server-Sent Events (async generator with asyncio.Queue fan-out) to a React + TypeScript operator UI; 136 pytest tests using pytest-asyncio and AsyncMock."
+    },
+    {
+      "id": "ai-web3-assistant",
+      "title": "AI Web3 Assistant",
+      "stack": ["RAG", "ChromaDB", "embeddings", "LLM agents"],
+      "description": "Agentic AI platform using RAG, ChromaDB vector embeddings, and custom LLM agents to generate personalized blockchain insights from wallet activity, social profiles, and on-chain behavior."
+    },
+    {
+      "id": "blockchain-analytics",
+      "title": "Blockchain Analytics Platform",
+      "stack": ["Python", "Node.js", "GCP", "MongoDB"],
+      "description": "Large-scale data pipelines aggregating and normalizing activity across 16 blockchain data sources, powering user analytics, engagement scoring, and historical journey reconstruction."
+    },
+    {
+      "id": "websocket-gateway",
+      "title": "Real-Time WebSocket Gateway",
+      "stack": ["Node.js", "TypeScript", "Redis Pub/Sub"],
+      "description": "Horizontally scaled WebSocket servers without sticky sessions, using Redis Pub/Sub to broadcast events and stream chunked LLM responses to clients on any instance."
+    }
+  ],
+  "skills": {
+    "Languages": ["Python", "Go", "TypeScript", "JavaScript", "SQL"],
+    "Backend": ["FastAPI", "Django", "Pydantic", "SQLAlchemy", "asyncio", "multiprocessing", "Node.js/Express", "REST APIs", "OpenAPI", "SSE", "WebSockets", "Flask"],
+    "Go": ["Gin", "net/http", "goroutines & channels", "context", "AWS Lambda (Go)", "go test"],
+    "Auth & Security": ["JWT (access + refresh, cookie-based)", "API-key auth", "HashiCorp Vault"],
+    "Databases": ["MySQL", "PostgreSQL", "Alembic migrations", "MongoDB", "Redis"],
+    "Testing & Observability": ["pytest", "pytest-asyncio", "unittest.mock", "FastAPI TestClient", "go test", "Vitest", "Artillery", "Postman", "Sentry", "Prometheus", "Grafana"],
+    "Architecture": ["Microservices", "Event-driven (Kafka, SQS, Kinesis, Redis Pub/Sub)", "Autoscaling", "Caching"],
+    "Cloud & DevOps": ["Linux", "AWS Lambda", "API Gateway", "Kinesis", "SQS", "RDS", "GCP Compute Engine", "Cloud Load Balancing", "Cloud SQL", "Pub/Sub", "Cloud Run", "Docker", "Kubernetes (EKS)", "Terraform", "GitHub Actions", "Nginx"],
+    "Frontend": ["React", "Next.js", "TypeScript"],
+    "AI/LLM": ["RAG", "Embeddings", "Vector search (ChromaDB)", "Multi-agent orchestration", "LLM streaming", "Vercel AI SDK"],
+    "Web3": ["Multi-chain data aggregation (16 sources)", "On-chain analytics", "Wallet intelligence", "MetaMask integration", "NFT mint launches", "Web3 AI agents"]
+  },
+  "education": {
+    "degree": "Bachelor of Technology, Computer Science and Engineering",
+    "university": "Guru Gobind Singh Indraprastha University",
+    "location": "Delhi, India",
+    "period": "2016 - 2020"
+  }
+}

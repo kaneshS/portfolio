@@ -7,10 +7,10 @@ A modern, interactive portfolio website featuring an embedded AI assistant power
 ## Features
 
 - **AI Assistant** - Embedded chatbot using Groq LLM with RAG pipeline for personalized responses
-- **Harry Potter Theme** - Light parchment-inspired design with forest green and brown accents
-- **Interactive Experience Timeline** - Marauder's Map-style journey with animated footsteps
+- **Marauder's Map Theme** - Aged parchment and ink by day (Lumos), the map by wandlight at night (Nox). See [DESIGN.md](DESIGN.md)
+- **The Corridors** - Experience timeline with footprints that walk the corridor as you scroll
 - **Architecture Diagrams** - Mermaid.js flowcharts for project architectures
-- **GSAP Animations** - Smooth scroll-triggered animations throughout
+- **One authored moment** - "I solemnly swear…" reveals the map on first visit; CSS-only motion elsewhere
 - **Responsive Design** - Mobile-first approach with custom cursor effects
 
 ## Tech Stack
@@ -18,10 +18,10 @@ A modern, interactive portfolio website featuring an embedded AI assistant power
 - **Framework:** Next.js 14 (App Router)
 - **Language:** TypeScript
 - **Styling:** Tailwind CSS
-- **Animations:** GSAP, Framer Motion
-- **AI/LLM:** Groq API (Llama 3.3 70B)
+- **Animations:** CSS transitions and keyframes (no animation library)
+- **AI/LLM:** Groq API (GPT-OSS 120B)
 - **Diagrams:** Mermaid.js
-- **Fonts:** Cinzel, Crimson Text
+- **Fonts:** IM Fell English SC, Alegreya, Caveat (via next/font)
 
 ## Getting Started
 

@@ -1,141 +1,52 @@
-"use client";
+import { Section, Banner } from "@/components/ui/section";
+import { profile, education } from "@/data/profile";
+import { WaxSeal } from "@/components/ui/ornaments";
 
-import { useEffect, useRef, useMemo } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Section, SectionHeader } from "@/components/ui/section";
-import { profile } from "@/data/profile";
-import { ExperienceJourney } from "./experience-journey";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
-
-function calculateYearsOfExperience(): string {
-  const startDate = new Date(2020, 8, 1); // September 2020 (month is 0-indexed)
+function yearsSince(y: number, m: number) {
   const now = new Date();
-  
-  const totalMonths =
-    (now.getFullYear() - startDate.getFullYear()) * 12 +
-    (now.getMonth() - startDate.getMonth());
-  
-  const years = Math.floor(totalMonths / 12);
-  const months = totalMonths % 12;
-  
-  // If months >= 8, round up to next year
-  const displayYears = months >= 8 ? years + 1 : years;
-  
-  return `${displayYears}+`;
+  const months = (now.getFullYear() - y) * 12 + (now.getMonth() - m);
+  return `${Math.floor(months / 12)}+`;
 }
 
 export function About() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const narrativeRef = useRef<HTMLDivElement>(null);
-  const statsRef = useRef<HTMLDivElement>(null);
-  
-  const yearsOfExperience = useMemo(() => calculateYearsOfExperience(), []);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Animate narrative from left
-      gsap.fromTo(
-        narrativeRef.current,
-        { opacity: 0, x: -40 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: narrativeRef.current,
-            start: "top 80%",
-            end: "top 50%",
-            toggleActions: "play none none reverse",
-          },
-        }
-      );
-
-      // Animate stats from right
-      gsap.fromTo(
-        statsRef.current,
-        { opacity: 0, x: 40 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: statsRef.current,
-            start: "top 80%",
-            end: "top 50%",
-            toggleActions: "play none none reverse",
-          },
-        }
-      );
-
-      // Animate each stat card
-      const statCards = statsRef.current?.querySelectorAll(".stat-card");
-      if (statCards) {
-        gsap.fromTo(
-          statCards,
-          { opacity: 0, y: 30, scale: 0.95 },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.5,
-            stagger: 0.1,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: statsRef.current,
-              start: "top 75%",
-            },
-          }
-        );
-      }
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <Section ref={sectionRef} id="about" className="bg-muted/30">
-      <SectionHeader
-        title="About Me"
-        subtitle="A journey of building systems that scale"
-      />
+    <Section id="about">
+      <Banner title="The Walker" note="who is making these footprints" />
 
-      <div className="grid lg:grid-cols-2 gap-16 mb-16">
-        {/* Narrative */}
-        <div ref={narrativeRef} className="space-y-6">
-          {profile.aboutMe.split("\n\n").map((paragraph, idx) => (
-            <p key={idx} className="text-muted-foreground leading-relaxed">
-              {paragraph.trim()}
+      <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
+        <div className="lg:col-span-7 space-y-5 text-ink-soft max-w-[66ch] text-[1.05rem] md:text-lg">
+          {profile.aboutMe.split("\n\n").map((p, i) => (
+            <p key={i} className={i === 0 ? "first-letter:font-display first-letter:text-5xl first-letter:float-left first-letter:mr-2 first-letter:leading-[0.8] first-letter:text-ink" : ""}>
+              {p.trim()}
             </p>
           ))}
         </div>
 
-        {/* Quick stats */}
-        <div ref={statsRef} className="flex flex-wrap gap-4 content-start">
-          {[
-            { label: "Years Experience", value: yearsOfExperience },
-            { label: "Users Served", value: "5M+" },
-          ].map((stat) => (
-            <div
-              key={stat.label}
-              className="stat-card px-5 py-3 rounded-lg bg-card border border-border inline-flex items-center gap-3"
-            >
-              <div className="text-2xl font-bold text-accent">
-                {stat.value}
+        <aside className="lg:col-span-5 lg:pl-8 lg:border-l border-rule/50 space-y-8">
+          <dl className="grid grid-cols-2 gap-x-6 gap-y-6">
+            {[
+              [yearsSince(2020, 8), "years in production"],
+              ["5M", "users on one Go backend"],
+              ["50+", "enterprise API clients"],
+              ["$600K+", "from one launch, in 2 weeks"],
+            ].map(([v, l]) => (
+              <div key={l}>
+                <dt className="font-display text-3xl md:text-4xl text-ink tabular-nums">{v}</dt>
+                <dd className="text-sm text-ink-soft mt-1">{l}</dd>
               </div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-      </div>
+            ))}
+          </dl>
 
-      {/* Experience Journey - Horizontal Timeline */}
-      <ExperienceJourney />
+          <div className="rule-dashed pt-6 flex items-start gap-4">
+            <WaxSeal className="w-14 h-14 shrink-0" letter="B" />
+            <div>
+              <p className="font-display text-ink">{education.university}</p>
+              <p className="text-sm text-ink-soft">{education.degree}</p>
+              <p className="text-sm text-ink-faint">{education.location} · {education.period}</p>
+            </div>
+          </div>
+        </aside>
+      </div>
     </Section>
   );
 }

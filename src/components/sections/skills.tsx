@@ -1,124 +1,47 @@
-"use client";
+import { resume } from "@/data/profile";
+import { Section, Banner } from "@/components/ui/section";
+import { Frame } from "@/components/ui/ornaments";
 
-import { motion } from "framer-motion";
-import {
-  Code2,
-  Cloud,
-  Database,
-  Settings,
-  type LucideIcon,
-} from "lucide-react";
-import { Section, SectionHeader } from "@/components/ui/section";
-import { skills } from "@/data/profile";
-
-const categoryIcons: Record<string, LucideIcon> = {
-  "Languages & Frameworks": Code2,
-  "Cloud & Infrastructure": Cloud,
-  "Databases & Messaging": Database,
-  "DevOps & Tools": Settings,
-};
-
-const categoryDescriptions: Record<string, string> = {
-  "Languages & Frameworks":
-    "Building robust APIs with Python (FastAPI, Flask) and Node.js. Full-stack capable with React.js.",
-  "Cloud & Infrastructure":
-    "Deep experience with AWS and GCP, container orchestration, and infrastructure as code with Terraform.",
-  "Databases & Messaging":
-    "Designing high-throughput pipelines with Kafka, SQL/NoSQL databases, and vector search with ChromaDB.",
-  "DevOps & Tools":
-    "CI/CD pipelines, secrets management, load balancing, and production monitoring.",
-};
-
+/* The Inventory: a ledger, not chips. Every skill group from the resume, in columns. */
 export function Skills() {
+  const groups = Object.entries(resume.skills);
   return (
-    <Section id="skills" className="bg-muted/30">
-      <SectionHeader
-        title="Skills & Expertise"
-        subtitle="Core competencies in backend and infrastructure engineering"
-      />
+    <Section id="skills">
+      <Banner title="The Inventory" note="what I carry into every build" />
 
-      <div className="grid md:grid-cols-2 gap-6">
-        {skills.map((skill, idx) => {
-          const Icon = categoryIcons[skill.category] || Code2;
-
-          return (
-            <motion.div
-              key={skill.category}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group p-6 md:p-8 rounded-2xl bg-card border border-border hover:border-accent/50 transition-all duration-300"
-            >
-              <div className="flex items-start gap-4 mb-4">
-                <div className="p-3 rounded-xl bg-accent/10 text-accent">
-                  <Icon className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold group-hover:text-accent transition-colors">
-                    {skill.category}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    {categoryDescriptions[skill.category]}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-2 mt-4">
-                {skill.items.map((item, itemIdx) => (
-                  <motion.span
-                    key={item}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.2, delay: idx * 0.1 + itemIdx * 0.03 }}
-                    className="px-3 py-1.5 text-sm rounded-lg bg-muted border border-border hover:border-accent/30 hover:bg-accent/5 transition-colors cursor-default"
-                  >
-                    {item}
-                  </motion.span>
+      <Frame paper className="p-6 md:p-10">
+        <div className="columns-1 sm:columns-2 lg:columns-3 gap-10 [column-fill:balance]">
+          {groups.map(([name, items]) => (
+            <section key={name} className="break-inside-avoid mb-8">
+              <h3 className="font-display text-base text-ink border-b border-rule/60 pb-1 mb-2 flex items-baseline justify-between">
+                {name}
+                <span className="text-xs text-ink-faint tabular-nums">{items.length}</span>
+              </h3>
+              <ul className="text-[0.95rem] text-ink-soft leading-relaxed">
+                {items.map((s) => (
+                  <li key={s} className="flex gap-2">
+                    <span className="text-ink-faint" aria-hidden="true">·</span>
+                    {s}
+                  </li>
                 ))}
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
-
-      {/* Architecture principles */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.4 }}
-        className="mt-12 p-8 rounded-2xl bg-accent/5 border border-accent/20"
-      >
-        <h3 className="text-xl font-semibold mb-4">Engineering Philosophy</h3>
-        <div className="grid md:grid-cols-3 gap-6">
-          {[
-            {
-              title: "Event-Driven First",
-              description:
-                "Prefer decoupled, event-driven architectures with Kafka and message queues for scalability.",
-            },
-            {
-              title: "Cost-Performance Balance",
-              description:
-                "Optimize for both speed and cost - achieved 50% faster response with 40% cost reduction.",
-            },
-            {
-              title: "Infrastructure as Code",
-              description:
-                "Terraform for reproducible infrastructure, GitOps for deployment consistency.",
-            },
-          ].map((principle) => (
-            <div key={principle.title}>
-              <h4 className="font-medium text-accent mb-2">{principle.title}</h4>
-              <p className="text-sm text-muted-foreground">
-                {principle.description}
-              </p>
-            </div>
+              </ul>
+            </section>
           ))}
         </div>
-      </motion.div>
+      </Frame>
+
+      <div className="mt-12 grid md:grid-cols-3 gap-8 max-w-5xl">
+        {[
+          ["Event-driven first", "Kafka, SQS, Kinesis and Redis Pub/Sub before a cron job and a shared table."],
+          ["Cost is a feature", "Right-sized instances, caching, and autoscaling on real signals cut 35–40% off two cloud bills."],
+          ["Tests behind gates", "pytest against mocked dependencies, coverage gates in CI, Prometheus and Grafana on the other side."],
+        ].map(([t, d]) => (
+          <div key={t}>
+            <h3 className="font-display text-lg">{t}</h3>
+            <p className="text-ink-soft text-[0.95rem] mt-1">{d}</p>
+          </div>
+        ))}
+      </div>
     </Section>
   );
 }

@@ -1,14 +1,6 @@
-"use client";
-
-import { useEffect, useRef, forwardRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { forwardRef, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { type ReactNode } from "react";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
+import { Ribbon } from "./ornaments";
 
 interface SectionProps {
   id?: string;
@@ -16,59 +8,22 @@ interface SectionProps {
   children: ReactNode;
 }
 
-export const Section = forwardRef<HTMLElement, SectionProps>(
-  function Section({ id, className, children }, ref) {
-    return (
-      <section ref={ref} id={id} className={cn("py-24 md:py-32", className)}>
-        <div className="container mx-auto px-6">{children}</div>
-      </section>
-    );
-  }
-);
-
-interface SectionHeaderProps {
-  title: string;
-  subtitle?: string;
-  className?: string;
-}
-
-export function SectionHeader({
-  title,
-  subtitle,
-  className,
-}: SectionHeaderProps) {
-  const headerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        headerRef.current,
-        { opacity: 0, y: 30 },
-        {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          ease: "power2.out",
-          scrollTrigger: {
-            trigger: headerRef.current,
-            start: "top 85%",
-            toggleActions: "play none none reverse",
-          },
-        }
-      );
-    }, headerRef);
-
-    return () => ctx.revert();
-  }, []);
-
+export const Section = forwardRef<HTMLElement, SectionProps>(function Section({ id, className, children }, ref) {
   return (
-    <div ref={headerRef} className={cn("mb-16", className)}>
-      <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-        {title}
+    <section ref={ref} id={id} className={cn("py-20 md:py-28", className)}>
+      <div className="container">{children}</div>
+    </section>
+  );
+});
+
+/* Section title drawn as a map label: ribbon + handwritten subtitle. */
+export function Banner({ title, note, className }: { title: string; note?: string; className?: string }) {
+  return (
+    <div className={cn("mb-12 md:mb-16 flex flex-col items-start gap-3", className)}>
+      <h2 className="text-3xl md:text-4xl">
+        <Ribbon className="text-[0.85em] md:text-[0.8em]">{title}</Ribbon>
       </h2>
-      {subtitle && (
-        <p className="text-muted-foreground text-lg max-w-2xl">{subtitle}</p>
-      )}
+      {note && <p className="margin-note ml-4">{note}</p>}
     </div>
   );
 }

@@ -1,60 +1,38 @@
 import type { Config } from "tailwindcss";
 import typography from "@tailwindcss/typography";
 
-// Helper to create color with opacity support
-function withOpacity(variable: string) {
-  return `rgb(var(${variable}) / <alpha-value>)`;
-}
+const c = (v: string) => `rgb(var(${v}) / <alpha-value>)`;
 
 const config: Config = {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   darkMode: "class",
   theme: {
+    container: { center: true, padding: { DEFAULT: "1rem", md: "2rem" }, screens: { "2xl": "1200px" } },
     extend: {
       colors: {
-        background: withOpacity("--background"),
-        foreground: withOpacity("--foreground"),
-        muted: {
-          DEFAULT: withOpacity("--muted"),
-          foreground: withOpacity("--muted-foreground"),
-        },
-        border: withOpacity("--border"),
-        accent: {
-          DEFAULT: withOpacity("--accent"),
-          foreground: withOpacity("--accent-foreground"),
-        },
-        card: {
-          DEFAULT: withOpacity("--card"),
-          foreground: withOpacity("--card-foreground"),
-        },
+        bg: c("--bg"),
+        "bg-deep": c("--bg-deep"),
+        paper: c("--paper"),
+        ink: { DEFAULT: c("--ink"), soft: c("--ink-soft"), faint: c("--ink-faint") },
+        rule: c("--rule"),
+        wax: { DEFAULT: c("--wax"), fg: c("--wax-fg") },
+        gold: c("--gold"),
+        // aliases so @tailwindcss/typography and any leftovers keep working
+        background: c("--bg"),
+        foreground: c("--ink"),
+        muted: { DEFAULT: c("--paper"), foreground: c("--ink-soft") },
+        border: c("--rule"),
+        accent: { DEFAULT: c("--wax"), foreground: c("--wax-fg") },
+        card: { DEFAULT: c("--paper"), foreground: c("--ink") },
       },
       fontFamily: {
-        sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
-        mono: ["var(--font-geist-mono)", "monospace"],
+        display: ["var(--font-display)", "Georgia", "serif"],
+        body: ["var(--font-body)", "Georgia", "serif"],
+        hand: ["var(--font-hand)", "cursive"],
       },
-      animation: {
-        "fade-in": "fadeIn 0.5s ease-out forwards",
-        "slide-up": "slideUp 0.5s ease-out forwards",
-        "slide-down": "slideDown 0.3s ease-out forwards",
-        pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-      },
-      keyframes: {
-        fadeIn: {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
-        },
-        slideUp: {
-          "0%": { opacity: "0", transform: "translateY(20px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
-        slideDown: {
-          "0%": { opacity: "0", transform: "translateY(-10px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
+      transitionTimingFunction: {
+        out: "cubic-bezier(0.23, 1, 0.32, 1)",
+        "in-out": "cubic-bezier(0.77, 0, 0.175, 1)",
       },
     },
   },

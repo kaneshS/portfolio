@@ -1,108 +1,52 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Mail, Github, Linkedin, ArrowUpRight, MessageSquare, FileText } from "lucide-react";
-import { Section } from "@/components/ui/section";
-import { MotionButton } from "@/components/ui/button";
-import { ContactForm } from "@/components/contact-form";
+import { Github, Linkedin, Mail, FileText } from "lucide-react";
 import { profile } from "@/data/profile";
+import { Section } from "@/components/ui/section";
+import { ContactForm } from "@/components/contact-form";
+import { WaxSeal } from "@/components/ui/ornaments";
 
 export function Contact() {
-  const [isFormOpen, setIsFormOpen] = useState(false);
-
-  const socialLinks = [
-    {
-      label: "GitHub",
-      href: profile.github,
-      icon: Github,
-    },
-    {
-      label: "LinkedIn",
-      href: profile.linkedin,
-      icon: Linkedin,
-    },
-    {
-      label: "Email",
-      href: `mailto:${profile.email}`,
-      icon: Mail,
-    },
-  ];
+  const [open, setOpen] = useState(false);
 
   return (
-    <Section id="contact" className="bg-muted/30">
+    <Section id="contact">
       <div className="max-w-3xl mx-auto text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-            Let&apos;s Build Something Together
-          </h2>
-          <p className="text-lg text-muted-foreground mb-8">
-            I&apos;m always interested in discussing new projects, complex systems
-            challenges, or opportunities to create impact at scale.
-          </p>
-        </motion.div>
+        <WaxSeal className="w-20 h-20 mx-auto" />
+        <h2 className="text-4xl md:text-5xl mt-6">Owl Post</h2>
+        <p className="text-ink-soft mt-4 max-w-[50ch] mx-auto">
+          For senior backend roles, consulting, or a conversation about distributed systems. Letters are answered within two days.
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
-        >
-          <MotionButton 
-            size="lg" 
-            className="gap-2"
-            onClick={() => setIsFormOpen(true)}
-          >
-            <MessageSquare className="w-4 h-4" />
-            Get in Touch
-          </MotionButton>
-          <a
-            href={profile.resume}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <MotionButton 
-              size="lg" 
-              variant="secondary"
-              className="gap-2"
-            >
-              <FileText className="w-4 h-4" />
-              Download Resume
-            </MotionButton>
+        <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <button onClick={() => setOpen(true)} className="btn btn-wax" aria-haspopup="dialog">
+            Send a letter
+          </button>
+          <a href={profile.resume} target="_blank" rel="noopener noreferrer" className="btn btn-ink">
+            <FileText className="w-4 h-4" /> Resume (PDF)
           </a>
-        </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex items-center justify-center gap-6"
-        >
-          {socialLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <link.icon className="w-5 h-5" />
-              <span className="text-sm">{link.label}</span>
-              <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-            </a>
-          ))}
-        </motion.div>
+        <ul className="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-3 font-display text-[0.95rem]">
+          {[
+            [profile.github, "GitHub", Github],
+            [profile.linkedin, "LinkedIn", Linkedin],
+            [`mailto:${profile.email}`, "Email", Mail],
+          ].map(([href, label, Icon]) => {
+            const I = Icon as typeof Github;
+            return (
+              <li key={label as string}>
+                <a href={href as string} target="_blank" rel="noopener noreferrer" className="ink-link inline-flex items-center gap-2 text-ink-soft hover:text-ink py-2">
+                  <I className="w-4 h-4" /> {label as string}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
       </div>
 
-      {/* Contact Form Modal */}
-      <ContactForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
+      <ContactForm isOpen={open} onClose={() => setOpen(false)} />
     </Section>
   );
 }
