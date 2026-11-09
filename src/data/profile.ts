@@ -1,42 +1,36 @@
 /**
  * Profile and portfolio data
- * Central data source for all components
+ * Source of truth: src/data/resume.json (extracted from Kaneshwar_Sharma.pdf)
+ * Projects + freelance below are hand-curated (diagrams, metrics).
  */
+import resume from "./resume.json";
+
+export { resume };
 
 // Basic profile info
 export const profile = {
-  name: "Kaneshwar Sharma",
-  title: "Senior Backend Engineer",
-  email: "mansotra10sharma@gmail.com",
-  phone: "+91-9868825809",
-  linkedin: "https://linkedin.com/in/kaneshwar",
-  github: "https://github.com/kaneshS",
-  medium: "https://medium.com/@mansotra99",
-  whatsapp: "https://wa.link/mbvszx",
-  resume: "https://drive.google.com/file/d/13RVrKZPUy_jR0yrSQD6wnJFJdU51hUw-/view?usp=sharing",
-  aboutMe: `I'm a Senior Backend Engineer with 5+ years of experience building distributed systems that handle scale with elegance. From Kafka-based microservices processing 200K+ images daily to Telegram bots serving 5 million users, I've architected solutions that solve real-world challenges.
+  name: resume.name,
+  title: resume.title,
+  email: resume.email,
+  phone: resume.phone,
+  location: resume.location,
+  linkedin: resume.links.linkedin,
+  github: resume.links.github,
+  medium: resume.links.medium,
+  whatsapp: resume.links.whatsapp,
+  resume: resume.links.resume,
+  aboutMe: `I'm a backend-focused senior software engineer who builds Python (FastAPI) and Go REST APIs, event-driven microservices, and data pipelines on Linux, AWS, and GCP. From Kafka pipelines processing 200K+ images a day to a serverless Go backend serving ~5M Telegram users, I've shipped systems that handle real scale.
 
-My journey in tech has taken me from building automated data pipelines to leading infrastructure migrations from AWS to GCP. I thrive in environments where complex problems meet elegant solutions, whether that's optimizing cloud costs by 40% or building AI-powered assistants that transform how users interact with Web3.
+At Spyne.ai I was promoted to SDE-II and team lead of 3 within 13 months, shipping FastAPI APIs with API-key auth for 50+ enterprise clients. At Intract, a Web3 platform, I built the backend for a multi-chain analytics launch that generated $600K+ in NFT mint revenue within 2 weeks, and led the AWS-to-GCP migration that cut p95 latency 50% and cloud spend 40%.
 
-Currently, I'm focused on building scalable blockchain infrastructure at Intract, where we've generated over $600K in revenue through innovative data aggregation. When I'm not coding, I'm exploring new technologies and contributing to open source.`,
+Most recently at Turing, I built Go and PostgreSQL services integrating Uber into a Dubai-based super app, and backend APIs for standardized AI/ML training environments. I write unit tests against mocked dependencies behind CI coverage gates, and still reach for TypeScript and Next.js when a project needs a UI.`,
 };
 
 // Education
-export interface Education {
-  degree: string;
-  university: string;
-  location: string;
-  period: string;
-}
+export type Education = typeof resume.education;
+export const education: Education = resume.education;
 
-export const education: Education = {
-  degree: "Bachelor of Technology (B.Tech)",
-  university: "Guru Gobind Singh Indraprastha University",
-  location: "Delhi, India",
-  period: "2016 - 2020",
-};
-
-// Experience type
+// Experience
 export interface Experience {
   id: string;
   company: string;
@@ -48,102 +42,16 @@ export interface Experience {
   technologies: string[];
 }
 
-export const experiences: Experience[] = [
-  {
-    id: "intract-sde3",
-    company: "Intract",
-    role: "Senior Backend Engineer (SDE-III)",
-    period: "March 2024 - Present",
-    description:
-      "Leading backend infrastructure and AI initiatives for a Web3 platform",
-    achievements: [
-      "Designed multi-region GCP deployment with autoscaling and global load balancing",
-      "Built Terraform-based IaC and managed secrets with HashiCorp Vault",
-      "Achieved 50% faster response times and 40% cloud cost reduction",
-      "Built Ball-E: AI-powered Web3 query assistant in Go with Vercel AI SDK and agentic orchestration for personalized blockchain insights and wallet context",
-      "Implemented Pinecone-based RAG for semantic search over user data embeddings, enabling context-aware crypto insights",
-      "Optimized SSE real-time streaming with scalable Go backend for fast, responsive conversational UX",
-      "Led AWS to GCP infrastructure migration",
-      "Launched Intract Rewind generating $600K+ revenue in 2 weeks",
-    ],
-    technologies: [
-      "Go",
-      "Python",
-      "GCP",
-      "Terraform",
-      "Docker",
-      "Pinecone",
-      "OpenAI",
-      "Vercel AI SDK",
-      "LangChain",
-      "TypeScript",
-      "MongoDB",
-      "Redis",
-    ],
-  },
-  {
-    id: "intract-consultant",
-    company: "Intract",
-    role: "Consultant / Software Engineer",
-    period: "Jan 2024 - March 2024",
-    description: "Built robust Go backend for Telegram Mini App serving millions",
-    achievements: [
-      "Built robust Go backend for Telegram Mini App (Tap Tap game) serving ~5 million users",
-      "Handled daily load of 40K+ users using AWS Kinesis with Lambda functions for near real-time processing",
-      "Designed comprehensive test suite and CI/CD pipelines with GitHub Actions",
-    ],
-    technologies: [
-      "Go",
-      "AWS Kinesis",
-      "Lambda",
-      "Docker",
-      "GitHub Actions",
-      "MongoDB",
-    ],
-  },
-  {
-    id: "spyne",
-    company: "Spyne.ai",
-    role: "Senior Software Engineer (SDE-2)",
-    period: "March 2021 - Jan 2024",
-    location: "Gurgaon, Haryana",
-    description: "Led backend development for AI-powered image processing platform",
-    achievements: [
-      "Engineered Kafka-based architecture processing 200K+ images/day with parallel consumer groups",
-      "Built custom autoscaling controller monitoring topic lag and throughput, reducing costs by 35%",
-      "Designed FastAPI APIs serving 50+ global enterprise clients (automotive, e-commerce)",
-      "Led team of 3 engineers in API architecture design with versioned endpoints",
-      "Implemented Redis caching reducing DB load by 60%, improving response times to <100ms",
-      "Built complete mobile backend (Android & iOS) with real-time processing updates",
-      "Progressed from junior to senior to team lead, mentoring new hires",
-    ],
-    technologies: [
-      "Python",
-      "FastAPI",
-      "Kafka",
-      "MySQL",
-      "Docker",
-      "AWS",
-      "Redis",
-      "MongoDB",
-      "Prometheus",
-      "Grafana",
-    ],
-  },
-  {
-    id: "appsuccessor",
-    company: "Appsuccessor",
-    role: "Software Engineer",
-    period: "Sept 2020 - March 2021",
-    description: "Developed automation tools and APIs for marketing analytics",
-    achievements: [
-      "Built automated scripts for third-party API monitoring",
-      "Developed REST APIs and web scraping bots",
-      "Automated marketing analytics data collection",
-    ],
-    technologies: ["Python", "REST APIs", "Web Scraping", "Automation"],
-  },
-];
+export const experiences: Experience[] = resume.experience.map((e) => ({
+  id: e.id,
+  company: e.company,
+  role: e.role,
+  period: `${e.start} - ${e.end}`,
+  location: "location" in e ? e.location : undefined,
+  description: e.description,
+  achievements: e.achievements,
+  technologies: e.stack,
+}));
 
 // Projects
 export interface Project {
@@ -179,7 +87,7 @@ export const projects: Project[] = [
     style A fill:#e8f5e9
     style D fill:#e8f5e9
     style F fill:#e8f5e9`,
-    technologies: ["Node.js", "TypeScript", "GCP", "Redis", "MongoDB"],
+    technologies: ["Python", "Node.js", "TypeScript", "GCP", "MongoDB"],
     metrics: [
       { label: "Revenue", value: "$600K+" },
       { label: "Time to Market", value: "2 weeks" },
@@ -245,7 +153,7 @@ export const projects: Project[] = [
     problem:
       "Users needed personalized blockchain insights with wallet context, secure data isolation, and real-time responses",
     architecture:
-      "Orchestrator pattern routing to specialized agents, Pinecone RAG with OpenAI embeddings, SSE streaming",
+      "5+ intent-routed agents, ChromaDB vector search with per-user data isolation, SSE streaming",
     architectureDiagram: `flowchart TD
     A[User Query] --> B[Vercel AI SDK]
     B --> C[Orchestrator Router]
@@ -255,9 +163,9 @@ export const projects: Project[] = [
     D -->|Search| G[Web Search Agent]
     D -->|Social| H[Social Agent]
     D -->|General| I[Chat Agent]
-    E --> J[Pinecone + OpenAI]
+    E --> J[ChromaDB Vector Search]
     F --> K[Wallet Context]
-    E & F & G & H & I --> L[LangChain]
+    E & F & G & H & I --> L[Agent Orchestrator]
     L --> M[SSE Stream]
     M --> N[Response]
     O[MongoDB] -.-> M
@@ -266,7 +174,7 @@ export const projects: Project[] = [
     style B fill:#e8f5e9
     style J fill:#e8f5e9
     style L fill:#e8f5e9`,
-    technologies: ["Go", "TypeScript", "Vercel AI SDK", "LangChain", "Pinecone", "OpenAI", "MongoDB", "Redis"],
+    technologies: ["Go", "TypeScript", "Vercel AI SDK", "ChromaDB", "RAG", "MongoDB", "Redis"],
     metrics: [
       { label: "Specialized Agents", value: "5+" },
       { label: "Response Latency", value: "<1s" },
@@ -312,78 +220,62 @@ export const freelanceProjects: FreelanceProject[] = [
     id: "portfolio-ai",
     client: "Personal Project",
     title: "Interactive Portfolio with AI Assistant",
-    period: "2024",
+    period: "2024 – 2026",
     description:
       "Built a modern, interactive portfolio website featuring an embedded AI assistant powered by RAG that answers questions about my experience and projects.",
     overview:
-      "Designed and developed a full-stack portfolio with Next.js 14, featuring a Harry Potter-inspired theme, interactive animations, and an AI chatbot that uses RAG to answer questions about my background.",
+      "Designed and developed a full-stack portfolio with Next.js 14, featuring dark/light themes, interactive animations, and an AI chatbot that uses RAG to answer questions about my background.",
     deliverables: [
       "Next.js 14 App Router with TypeScript",
       "AI chatbot with Groq LLM and RAG pipeline",
-      "Harry Potter-themed UI with GSAP animations",
-      "Interactive experience timeline with footstep animations",
+      "Terminal theme with light and dark modes",
+      "git-log style experience list and tree-style stack",
       "Responsive design with custom cursor effects",
     ],
-    technologies: ["Next.js", "TypeScript", "Tailwind CSS", "GSAP", "Groq API", "Framer Motion"],
+    technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Groq API", "Mermaid"],
     outcome: "Unique portfolio showcasing technical skills with an AI-powered personal assistant",
   },
 ];
 
-// Skills - array format for the Skills component
+// Skills - array format for the Skills component (4 cards)
+const s = resume.skills;
 export const skills = [
-  {
-    category: "Languages & Frameworks",
-    items: ["Python", "TypeScript", "JavaScript", "Go", "Node.js", "FastAPI", "Flask", "Express.js", "React.js", "Next.js"],
-  },
-  {
-    category: "Cloud & Infrastructure",
-    items: ["AWS EC2", "AWS Lambda", "AWS Kinesis", "GCP Compute", "Cloud Run", "Cloud SQL", "Pub/Sub", "Terraform", "Docker"],
-  },
-  {
-    category: "Databases & Messaging",
-    items: ["PostgreSQL", "MySQL", "MongoDB", "Redis", "ChromaDB", "Apache Kafka", "AWS SQS", "Redis Pub/Sub"],
-  },
-  {
-    category: "DevOps & Tools",
-    items: ["Docker", "Terraform", "GitHub Actions", "Nginx", "HashiCorp Vault", "Fluentd", "CI/CD"],
-  },
+  { category: "Languages & Frameworks", items: [...s["Languages"], ...s["Backend"].slice(0, 5), ...s["Frontend"].slice(0, 2)] },
+  { category: "Cloud & Infrastructure", items: s["Cloud & DevOps"] },
+  { category: "Databases & Messaging", items: [...s["Databases"], "Kafka", "SQS", "Kinesis", "Redis Pub/Sub", "ChromaDB"] },
+  { category: "Testing, Auth & AI", items: [...s["Testing & Observability"].slice(0, 6), ...s["Auth & Security"], ...s["AI/LLM"]] },
 ];
 
-// RAG chunks for AI assistant
+// RAG chunks for AI assistant - derived from resume.json
 export const ragChunks = [
   {
     id: "personal",
-    content: `Kaneshwar Sharma is a Senior Backend Engineer with 5+ years of experience. Contact: Email mansotra10sharma@gmail.com, Phone +91-9868825809. LinkedIn: linkedin.com/in/kaneshwar, GitHub: github.com/kaneshS`,
+    content: `${resume.name} is a ${resume.title} based in ${resume.location}. ${resume.summary} Contact: Email ${resume.email}, Phone ${resume.phone}. LinkedIn: ${resume.links.linkedin}, GitHub: ${resume.links.github}`,
     metadata: { type: "personal" },
   },
-  {
-    id: "current-role",
-    content: `Currently working at Intract as Senior Backend Engineer (SDE-III) since March 2024. Key achievements: Multi-region GCP deployment, 50% faster response times, 40% cost reduction. Built Ball-E - an AI-powered Web3 assistant using orchestrator pattern with specialized agents, Pinecone RAG with OpenAI embeddings for personalized blockchain insights, real-time SSE streaming, MongoDB conversations, Redis caching. Led AWS to GCP migration. Launched Intract Rewind generating $600K+ revenue.`,
-    metadata: { type: "experience" },
-  },
-  {
-    id: "experience-spyne",
-    content: `Worked at Spyne.ai (March 2021 - Jan 2024) as Senior Software Engineer. Built Kafka-based microservices processing 200K+ images/day with parallel consumer groups. Custom autoscaling controller reduced costs by 35%. FastAPI APIs for 50+ enterprise clients (automotive, e-commerce). Redis caching reduced DB load by 60%, response times <100ms. Led team of 3 engineers. Progressed from junior to senior to team lead. Built mobile backend for Android & iOS. Set up Prometheus/Grafana monitoring.`,
-    metadata: { type: "experience" },
-  },
+  ...resume.experience.map((e) => ({
+    id: `experience-${e.id}`,
+    content: `${e.company} (${e.start} - ${e.end}), ${e.role}. ${e.description}. Stack: ${e.stack.join(", ")}. ${e.achievements.join(" ")}`,
+    metadata: { type: "experience", company: e.company },
+  })),
   {
     id: "skills",
-    content: `Technical skills: Python, TypeScript, Go, Node.js. Frameworks: FastAPI, Express, React, Next.js. Databases: PostgreSQL, MongoDB, Redis, ChromaDB. Cloud: AWS and GCP expert. DevOps: Docker, Terraform, Kafka, CI/CD.`,
+    content: `Technical skills. ${Object.entries(s).map(([k, v]) => `${k}: ${v.join(", ")}`).join(". ")}.`,
     metadata: { type: "skills" },
   },
   {
     id: "projects",
-    content: `Notable projects: Ball-E AI Web3 Assistant (orchestrator pattern, Pinecone RAG, OpenAI embeddings, specialized agents for wallet context and blockchain insights, SSE streaming), Intract Rewind ($600K revenue, 16 blockchain sources), Telegram Mini App (5M users, 40K daily active), AI Image Pipeline (200K+ images/day), WebSocket + Redis Pub/Sub System (real-time LLM streaming, horizontally scalable, sub-50ms latency).`,
+    content: `Notable projects: ${resume.projects.map((p) => `${p.title} (${p.stack.join(", ")}): ${p.description}`).join(" ")} Also: Intract Rewind ($600K+ revenue, 16 blockchain sources), Telegram Mini App backend (5M users, 40K daily active), AI Image Pipeline at Spyne (200K+ images/day).`,
     metadata: { type: "projects" },
   },
   {
     id: "education",
-    content: `Education: Bachelor of Technology (B.Tech) from Guru Gobind Singh Indraprastha University (GGSIPU), Delhi, India. Duration: 2016 - 2020.`,
+    content: `Education: ${resume.education.degree} from ${resume.education.university}, ${resume.education.location}. Duration: ${resume.education.period}.`,
     metadata: { type: "education" },
   },
   {
     id: "freelance",
-    content: `Freelance projects: Tech Lead at Stealth AI Gaming Startup - led cross-functional teams (frontend, backend, AI) building AI-powered WebGL game generation platform from natural language prompts. Interactive Portfolio with AI Assistant - built this portfolio using Next.js 14, TypeScript, GSAP animations, Harry Potter theme, and embedded AI chatbot with Groq LLM and RAG pipeline. Technologies: FastAPI, Python, WebGL, AI/ML, Next.js, Tailwind CSS, GSAP, Groq API.`,
+    content: `Freelance projects: ${freelanceProjects.map((f) => `${f.title} for ${f.client} (${f.period}): ${f.description} Technologies: ${f.technologies.join(", ")}. Outcome: ${f.outcome}`).join(" ")}`,
     metadata: { type: "freelance" },
   },
 ];

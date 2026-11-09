@@ -1,71 +1,44 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Navigation } from "@/components/navigation";
-import { CursorGlow } from "@/components/cursor-glow";
 import { PostHogProvider } from "@/components/posthog-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+const mono = localFont({ src: "./fonts/GeistMonoVF.woff", variable: "--font-mono", weight: "100 900", display: "swap" });
 
 export const metadata: Metadata = {
   title: "Kaneshwar Sharma | Senior Backend Engineer",
-  description:
-    "Senior Backend Engineer specializing in scalable systems, cloud infrastructure, and real-time applications.",
-  keywords: [
-    "backend engineer",
-    "software engineer",
-    "cloud",
-    "scalable systems",
-    "distributed systems",
-  ],
+  description: "Senior backend engineer. Python and Go REST APIs, event-driven microservices, Kafka pipelines, AWS and GCP.",
+  keywords: ["backend engineer", "software engineer", "python", "go", "fastapi", "kafka", "aws", "gcp"],
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#fdf6e3" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0b0a" },
+  ],
+  viewportFit: "cover",
+};
+
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var theme = localStorage.getItem('theme');
-                  if (theme === 'light') {
-                    document.documentElement.classList.remove('dark');
-                  } else {
-                    document.documentElement.classList.add('dark');
-                  }
-                } catch (e) {
-                  document.documentElement.classList.add('dark');
-                }
-              })();
-            `,
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t!=='light'){document.documentElement.classList.add('dark');}}catch(e){}})();`,
           }}
         />
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={mono.variable}>
+        <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] btn btn-primary">
+          Skip to content
+        </a>
         <ThemeProvider>
           <PostHogProvider>
-            <CursorGlow />
             <Navigation />
-            <main>{children}</main>
+            <main id="main">{children}</main>
           </PostHogProvider>
         </ThemeProvider>
       </body>

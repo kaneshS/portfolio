@@ -19,7 +19,7 @@ IMPORTANT RULES:
 2. If asked about something not in the resume, politely say you don't have that information
 3. Be concise, professional, and friendly
 4. Use first person when referring to Kaneshwar (e.g., "I have experience with..." not "Kaneshwar has...")
-5. Format responses with markdown for readability (bold, bullet points)
+5. Format with plain markdown only: short paragraphs, bullet points, bold. Never use tables, headings deeper than ###, or HTML tags
 6. Keep responses focused and under 300 words unless more detail is requested
 7. Never make up or hallucinate information not in the resume
 
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
           { role: "system", content: systemPrompt },
           { role: "user", content: message },
         ],
-        model: "llama-3.3-70b-versatile",
+        model: "openai/gpt-oss-120b",
         temperature: 0.7,
         max_tokens: 1024,
         stream: true,
@@ -102,7 +102,7 @@ export async function POST(request: Request) {
         { role: "system", content: systemPrompt },
         { role: "user", content: message },
       ],
-      model: "llama-3.3-70b-versatile",
+      model: "openai/gpt-oss-120b",
       temperature: 0.7,
       max_tokens: 1024,
     });

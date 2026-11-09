@@ -1,19 +1,11 @@
-"use client";
-
 export function Footer() {
-  const currentYear = new Date().getFullYear();
-
   return (
-    <footer className="py-8 border-t border-border">
-      <div className="container mx-auto px-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">
-            &copy; {currentYear} Kanesh. Built with Next.js and Tailwind CSS.
-          </p>
-          <p className="text-sm text-muted-foreground">
-            Designed with care for great user experience.
-          </p>
-        </div>
+    <footer className="border-t border-rule py-8" style={{ paddingBottom: "max(2rem, env(safe-area-inset-bottom))" }}>
+      <div className="container flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-[0.8rem] text-fg-faint">
+        <p>© {new Date().getFullYear()} Kaneshwar Sharma</p>
+        <p>
+          <span className="prompt">$</span> built with next.js · tailwind · geist mono <span className="text-fg-faint">{"// "}exit 0</span>
+        </p>
       </div>
     </footer>
   );

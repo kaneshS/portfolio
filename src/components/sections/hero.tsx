@@ -1,121 +1,72 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowDown, MessageSquare, Briefcase } from "lucide-react";
-import { profile } from "@/data/profile";
 import Link from "next/link";
+import { Github, Linkedin, Mail } from "lucide-react";
+import { profile, resume } from "@/data/profile";
 
-// Register ScrollTrigger
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
+/* Phrases from the resume summary that take the accent. Everything else stays off-white. */
+const highlights = ["Python (FastAPI) and Go REST APIs", "event-driven microservices", "200K+ images/day", "$600K+ in NFT mint revenue"];
+
+function Highlighted({ text }: { text: string }) {
+  const re = new RegExp(`(${highlights.map((h) => h.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})`, "g");
+  return (
+    <>
+      {text.split(re).map((part, i) => (highlights.includes(part) ? <span key={i} className="text-accent">{part}</span> : part))}
+    </>
+  );
 }
 
 export function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Initial animation timeline
-      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-
-      tl.to(".hero-badge", { opacity: 1, y: 0, duration: 0.6 })
-        .to(".hero-headline", { opacity: 1, y: 0, duration: 0.8 }, "-=0.3")
-        .to(".hero-subtitle", { opacity: 1, y: 0, duration: 0.6 }, "-=0.4")
-        .to(".hero-cta", { opacity: 1, y: 0, duration: 0.5 }, "-=0.3")
-        .to(".hero-tech", { opacity: 1, y: 0, duration: 0.5 }, "-=0.2");
-
-      // Subtle parallax on scroll (no opacity change)
-      gsap.to(".hero-content", {
-        yPercent: 15,
-        ease: "none",
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
+  // first two sentences of the summary
+  const summary = resume.summary.split(/(?<=\.)\s+/).slice(0, 2).join(" ");
+  const name = "Kanesh";
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Simple dark background */}
-      <div className="absolute inset-0 -z-10 bg-background" />
+    <section className="pt-32 pb-12 md:pt-40 md:pb-16" aria-labelledby="hero-title">
+      <div className="container max-w-3xl">
+        <p className="inline-flex items-center gap-2.5 rounded-full border border-rule bg-surface px-3 py-1.5 text-[0.75rem] text-fg-dim">
+          <span className="dot" aria-hidden="true" />
+          <span className="text-accent font-medium tracking-[0.08em]">AVAILABLE</span>
+          <span aria-hidden="true">·</span>
+          open to senior backend roles
+        </p>
 
-      <div className="container mx-auto px-6 py-32">
-        <div className="hero-content max-w-4xl mx-auto text-center">
-          {/* Status badge */}
-          <div className="hero-badge mb-8 opacity-0 translate-y-5">
-            <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-muted border border-border text-sm">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
-              </span>
-              Available for opportunities
-            </span>
-          </div>
+        <h1 id="hero-title" className="mt-7 text-[clamp(2.25rem,7vw,4rem)] leading-[1.1] font-medium" translate="no">
+          <span className="prompt">$</span> hi, I&rsquo;m
+          <br />
+          <span className="typed" style={{ ["--n" as string]: `${name.length}ch`, ["--steps" as string]: name.length }}>
+            {name}
+          </span>
+          <span className="caret" aria-hidden="true" />
+        </h1>
 
-          {/* Main headline */}
-          <h1 className="hero-headline text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 opacity-0 translate-y-10">
-            Building{" "}
-            <span className="text-accent">scalable systems</span>
-            <br />
-            that power millions
-          </h1>
+        <p className="mt-6 text-fg-dim text-[0.95rem] md:text-base">
+          {profile.title} <span className="text-fg-faint" aria-hidden="true">|</span> Python &amp; Go <span className="text-fg-faint" aria-hidden="true">|</span> Gurugram ↔ Remote
+        </p>
 
-          {/* Subtitle */}
-          <p className="hero-subtitle text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 opacity-0 translate-y-8">
-            {profile.title} specializing in distributed systems, cloud
-            infrastructure, and real-time data pipelines. I design backend
-            architectures that handle scale with elegance.
-          </p>
+        <p className="mt-6 max-w-[62ch] text-fg leading-relaxed">
+          <Highlighted text={summary} />
+        </p>
 
-          {/* CTA Buttons */}
-          <div className="hero-cta flex flex-wrap items-center justify-center gap-4 opacity-0 translate-y-5">
-            <Link
-              href="#projects"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-accent-foreground rounded-lg font-medium hover:bg-accent/90 transition-colors"
-            >
-              <Briefcase className="w-4 h-4" />
-              View Work
-            </Link>
-            <Link
-              href="/ai"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-muted border border-border rounded-lg font-medium hover:bg-muted/80 transition-colors"
-            >
-              <MessageSquare className="w-4 h-4" />
-              Talk to my AI
-            </Link>
-          </div>
-
-          {/* Tech stack preview */}
-          <div className="hero-tech mt-16 pt-16 border-t border-border opacity-0 translate-y-5">
-            <p className="text-sm text-muted-foreground mb-4">
-              Technologies I work with
-            </p>
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 text-muted-foreground max-w-xs sm:max-w-none mx-auto sm:flex-nowrap">
-              {["Python", "TypeScript", "FastAPI", "Kafka", "AWS", "GCP", "Docker", "PostgreSQL", "Redis", "Go"].map(
-                (tech) => (
-                  <span
-                    key={tech}
-                    className="px-2.5 sm:px-3 py-1 text-xs sm:text-sm border border-border rounded-md hover:border-accent/50 transition-colors"
-                  >
-                    {tech}
-                  </span>
-                )
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-          <ArrowDown className="w-5 h-5 text-muted-foreground" />
+        <div className="mt-8 flex flex-wrap items-center gap-3">
+          <a href="#contact" className="btn btn-primary">→ get in touch</a>
+          <Link href="#work" className="btn btn-ghost">
+            <span className="prompt">$</span> ls projects/
+          </Link>
+          <ul className="flex items-center gap-1 sm:ml-2">
+            {[
+              [profile.github, "GitHub", Github],
+              [profile.linkedin, "LinkedIn", Linkedin],
+              [`mailto:${profile.email}`, "Email", Mail],
+            ].map(([href, label, Icon]) => {
+              const I = Icon as typeof Github;
+              return (
+                <li key={label as string}>
+                  <a href={href as string} target="_blank" rel="noopener noreferrer" aria-label={label as string} className="inline-flex items-center justify-center min-h-[44px] min-w-[44px] rounded text-fg-dim hover:text-accent transition-colors duration-150">
+                    <I className="w-[18px] h-[18px]" />
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </div>
     </section>

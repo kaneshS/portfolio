@@ -1,108 +1,52 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Mail, Github, Linkedin, ArrowUpRight, MessageSquare, FileText } from "lucide-react";
-import { Section } from "@/components/ui/section";
-import { MotionButton } from "@/components/ui/button";
+import { profile, resume } from "@/data/profile";
+import { Section, SectionHead } from "@/components/ui/section";
 import { ContactForm } from "@/components/contact-form";
-import { profile } from "@/data/profile";
+
+const kv: [string, React.ReactNode][] = [
+  ["location", `${profile.location} · IST`],
+  ["status", <span key="s" className="text-accent">open to senior backend roles</span>],
+  ["stack", "Python / Go / FastAPI / Postgres / Kafka / AWS & GCP"],
+  ["github", <a key="g" href={profile.github} target="_blank" rel="noopener noreferrer" className="t-link">@{profile.github.split("/").pop()}</a>],
+  ["linkedin", <a key="l" href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="t-link">in/{profile.linkedin.split("/").pop()}</a>],
+  ["resume", <a key="r" href={resume.links.resume} target="_blank" rel="noopener noreferrer" className="t-link">Kaneshwar_Sharma.pdf</a>],
+];
 
 export function Contact() {
-  const [isFormOpen, setIsFormOpen] = useState(false);
-
-  const socialLinks = [
-    {
-      label: "GitHub",
-      href: profile.github,
-      icon: Github,
-    },
-    {
-      label: "LinkedIn",
-      href: profile.linkedin,
-      icon: Linkedin,
-    },
-    {
-      label: "Email",
-      href: `mailto:${profile.email}`,
-      icon: Mail,
-    },
-  ];
+  const [open, setOpen] = useState(false);
 
   return (
-    <Section id="contact" className="bg-muted/30">
-      <div className="max-w-3xl mx-auto text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-            Let&apos;s Build Something Together
-          </h2>
-          <p className="text-lg text-muted-foreground mb-8">
-            I&apos;m always interested in discussing new projects, complex systems
-            challenges, or opportunities to create impact at scale.
-          </p>
-        </motion.div>
+    <Section id="contact">
+      <SectionHead num="04" title="Get in touch" path="~/contact" />
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12"
-        >
-          <MotionButton 
-            size="lg" 
-            className="gap-2"
-            onClick={() => setIsFormOpen(true)}
-          >
-            <MessageSquare className="w-4 h-4" />
-            Get in Touch
-          </MotionButton>
-          <a
-            href={profile.resume}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <MotionButton 
-              size="lg" 
-              variant="secondary"
-              className="gap-2"
-            >
-              <FileText className="w-4 h-4" />
-              Download Resume
-            </MotionButton>
-          </a>
-        </motion.div>
+      <h2 className="text-[clamp(1.75rem,4.5vw,2.75rem)] font-medium">Let&rsquo;s build something.</h2>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex items-center justify-center gap-6"
-        >
-          {socialLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <link.icon className="w-5 h-5" />
-              <span className="text-sm">{link.label}</span>
-              <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-            </a>
+      <a href={`mailto:${profile.email}`} className="group mt-8 inline-flex items-center gap-4 text-[clamp(1.1rem,3vw,1.6rem)] text-fg break-all">
+        <span className="t-link group-hover:bg-[length:100%_1px]">{profile.email}</span>
+        <span className="hidden sm:inline-block text-accent transition-transform duration-200 ease-out group-hover:translate-x-2" aria-hidden="true">⟶</span>
+      </a>
+
+      <div className="mt-10 grid md:grid-cols-[1fr_auto] gap-10 items-start">
+        <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-[0.9rem]">
+          {kv.map(([k, v]) => (
+            <div key={k} className="contents">
+              <dt className="text-fg-faint">{k}</dt>
+              <dd className="text-fg-dim min-w-0 break-words">{v}</dd>
+            </div>
           ))}
-        </motion.div>
+        </dl>
+
+        <div className="md:text-right">
+          <p className="text-fg-faint text-[0.8rem] mb-3">prefer a form?</p>
+          <button onClick={() => setOpen(true)} className="btn btn-primary" aria-haspopup="dialog">
+            <span aria-hidden="true">$</span> send message
+          </button>
+        </div>
       </div>
 
-      {/* Contact Form Modal */}
-      <ContactForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
+      <ContactForm isOpen={open} onClose={() => setOpen(false)} />
     </Section>
   );
 }

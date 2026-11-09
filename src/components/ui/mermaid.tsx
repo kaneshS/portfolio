@@ -2,77 +2,55 @@
 
 import { useEffect, useRef, useState } from "react";
 import mermaid from "mermaid";
+import { useTheme } from "@/components/theme-provider";
 
-interface MermaidProps {
-  chart: string;
-  className?: string;
-}
+const palettes = {
+  light: { surface: "#f7f0dc", bg: "#fdf6e3", fg: "#1f2d33", rule: "#b8b09a", line: "#5a6f76", accent: "#167a48" },
+  dark: { surface: "#111311", bg: "#0a0b0a", fg: "#e6e8e3", rule: "#3a403a", line: "#7a827a", accent: "#39d98a" },
+};
 
-// Initialize mermaid with Harry Potter light theme
-mermaid.initialize({
-  startOnLoad: false,
-  theme: "base",
-  themeVariables: {
-    primaryColor: "#e8f5e9",
-    primaryTextColor: "#1e5128",
-    primaryBorderColor: "#1e5128",
-    lineColor: "#8b5a2b",
-    secondaryColor: "#f5f0e6",
-    tertiaryColor: "#fcfaf5",
-    background: "#fcfaf5",
-    mainBkg: "#f5f0e6",
-    secondBkg: "#fcfaf5",
-    nodeBorder: "#1e5128",
-    clusterBkg: "#f5f0e6",
-    clusterBorder: "#d2be9a",
-    titleColor: "#3e2f23",
-    edgeLabelBackground: "#fcfaf5",
-    textColor: "#3e2f23",
-    nodeTextColor: "#3e2f23",
-  },
-  flowchart: {
-    htmlLabels: true,
-    curve: "basis",
-    padding: 15,
-  },
-});
-
-export function Mermaid({ chart, className = "" }: MermaidProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [svg, setSvg] = useState<string>("");
+export function Mermaid({ chart, className = "" }: { chart: string; className?: string }) {
+  const { theme } = useTheme();
+  const [svg, setSvg] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const idRef = useRef(`m${Math.random().toString(36).slice(2, 8)}`);
 
   useEffect(() => {
-    const renderChart = async () => {
-      if (!containerRef.current || !chart) return;
-
-      try {
-        const id = `mermaid-${Math.random().toString(36).substring(7)}`;
-        const { svg } = await mermaid.render(id, chart);
-        setSvg(svg);
+    const p = palettes[theme];
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: "base",
+      fontFamily: "var(--font-mono), ui-monospace, monospace",
+      themeVariables: {
+        primaryColor: p.surface,
+        primaryTextColor: p.fg,
+        primaryBorderColor: p.rule,
+        lineColor: p.line,
+        secondaryColor: p.bg,
+        tertiaryColor: p.bg,
+        background: p.bg,
+        mainBkg: p.surface,
+        nodeBorder: p.rule,
+        clusterBkg: p.bg,
+        clusterBorder: p.rule,
+        titleColor: p.fg,
+        edgeLabelBackground: p.bg,
+        textColor: p.fg,
+        nodeTextColor: p.fg,
+      },
+      flowchart: { htmlLabels: true, curve: "linear", padding: 12 },
+    });
+    // strip hard-coded fills so the palette wins
+    const clean = chart.replace(/^\s*style .*$/gm, "");
+    mermaid
+      .render(`${idRef.current}-${theme}`, clean)
+      .then((r) => {
+        setSvg(r.svg);
         setError(null);
-      } catch (err) {
-        console.error("Mermaid render error:", err);
-        setError("Failed to render diagram");
-      }
-    };
+      })
+      .catch(() => setError("error: diagram failed to render"));
+  }, [chart, theme]);
 
-    renderChart();
-  }, [chart]);
-
-  if (error) {
-    return (
-      <div className={`p-4 rounded-xl bg-maroon/10 border border-maroon/20 text-maroon text-sm ${className}`}>
-        {error}
-      </div>
-    );
-  }
-
-  return (
-    <div
-      ref={containerRef}
-      className={`mermaid-container overflow-x-auto rounded-xl border border-border p-4 flex justify-center ${className}`}
-      dangerouslySetInnerHTML={{ __html: svg }}
-    />
-  );
+  if (error) return <p className="text-sm text-fg-dim">{error}</p>;
+  return <div className={`mermaid-container overflow-x-auto flex justify-center ${className}`} dangerouslySetInnerHTML={{ __html: svg }} />;
 }

@@ -1,60 +1,31 @@
 import type { Config } from "tailwindcss";
 import typography from "@tailwindcss/typography";
 
-// Helper to create color with opacity support
-function withOpacity(variable: string) {
-  return `rgb(var(${variable}) / <alpha-value>)`;
-}
+const c = (v: string) => `rgb(var(${v}) / <alpha-value>)`;
 
 const config: Config = {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
+  content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   darkMode: "class",
   theme: {
+    container: { center: true, padding: { DEFAULT: "1rem", md: "2rem" }, screens: { "2xl": "1120px" } },
     extend: {
       colors: {
-        background: withOpacity("--background"),
-        foreground: withOpacity("--foreground"),
-        muted: {
-          DEFAULT: withOpacity("--muted"),
-          foreground: withOpacity("--muted-foreground"),
-        },
-        border: withOpacity("--border"),
-        accent: {
-          DEFAULT: withOpacity("--accent"),
-          foreground: withOpacity("--accent-foreground"),
-        },
-        card: {
-          DEFAULT: withOpacity("--card"),
-          foreground: withOpacity("--card-foreground"),
-        },
+        bg: c("--bg"),
+        surface: { DEFAULT: c("--surface"), 2: c("--surface-2") },
+        fg: { DEFAULT: c("--fg"), dim: c("--fg-dim"), faint: c("--fg-faint") },
+        rule: c("--rule"),
+        accent: { DEFAULT: c("--accent"), fg: c("--on-accent") },
+        // aliases for @tailwindcss/typography
+        background: c("--bg"),
+        foreground: c("--fg"),
+        muted: { DEFAULT: c("--surface"), foreground: c("--fg-dim") },
+        border: c("--rule"),
       },
       fontFamily: {
-        sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
-        mono: ["var(--font-geist-mono)", "monospace"],
+        mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
-      animation: {
-        "fade-in": "fadeIn 0.5s ease-out forwards",
-        "slide-up": "slideUp 0.5s ease-out forwards",
-        "slide-down": "slideDown 0.3s ease-out forwards",
-        pulse: "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-      },
-      keyframes: {
-        fadeIn: {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
-        },
-        slideUp: {
-          "0%": { opacity: "0", transform: "translateY(20px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
-        slideDown: {
-          "0%": { opacity: "0", transform: "translateY(-10px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
-        },
+      transitionTimingFunction: {
+        out: "cubic-bezier(0.23, 1, 0.32, 1)",
       },
     },
   },
