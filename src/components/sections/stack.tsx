@@ -16,13 +16,14 @@ const findDir = (q: string) => {
   return groups.find(([n]) => slug(n) === k) ?? groups.find(([n]) => slug(n).startsWith(k));
 };
 
-type Out = string | { dir: string };
+type Out = string | { dir: string; items?: string[] };
 type Line = { cmd: string; cwd: string | null; out: Out[] };
 
 const HELP = [
   "ls            list directories, or skills inside one",
   "cd <dir>      enter a directory   (cd .. to go back)",
   "tree          show everything from here",
+  "show_all      every directory and its skills",
   "pwd           where am I",
   "clear         clear the screen",
   "tab           completes directory names",
@@ -47,6 +48,9 @@ function exec(raw: string, cwd: string | null): { out: Out[]; cwd: string | null
     }
     case "pwd":
       return { out: [cwd ? `~/stack/${slug(cwd)}` : "~/stack"], cwd };
+    case "show_all":
+    case "show-all":
+      return { out: groups.map(([n, v]) => ({ dir: n, items: v })), cwd };
     case "tree": {
       const src = cwd ? groups.filter(([n]) => n === cwd) : groups;
       const out: Out[] = [];
@@ -132,12 +136,12 @@ export function Stack() {
                 <span className="prompt">$</span> <span className="text-fg-faint">{prompt(l.cwd)}</span> {l.cmd}
               </p>
               {l.out.length > 0 && (
-                <ul className={`mt-1 ${l.cmd.trim() === "ls" || l.cmd.trim() === "ll" ? "grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6" : ""}`}>
+                <ul className={`mt-1 ${/^(ls|ll)$/.test(l.cmd.trim()) ? "grid sm:grid-cols-2 lg:grid-cols-3 gap-x-6" : /^show[_-]all$/.test(l.cmd.trim()) ? "grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 items-start" : ""}`}>
                   {l.out.map((o, j) =>
                     typeof o === "string" ? (
                       <li key={j} className="text-fg-dim whitespace-pre-wrap">{o}</li>
                     ) : (
-                      <li key={j}>
+                      <li key={j} className={o.items ? "mb-3" : ""}>
                         <button
                           type="button"
                           onClick={(e) => {
@@ -149,6 +153,11 @@ export function Stack() {
                         >
                           {o.dir}<span className="text-fg-faint">/</span>
                         </button>
+                        {o.items && (
+                          <ul className="tree">
+                            {o.items.map((s) => <li key={s}>{s}</li>)}
+                          </ul>
+                        )}
                       </li>
                     )
                   )}
@@ -176,7 +185,7 @@ export function Stack() {
               autoComplete="off"
               autoCapitalize="off"
               spellCheck={false}
-              placeholder="ls, cd backend, cd .., tree, help"
+              placeholder="ls, cd backend, cd .., show_all, help"
               className="flex-1 min-w-0 bg-transparent outline-none text-base md:text-[0.9rem] placeholder:text-fg-faint/70"
             />
           </form>
