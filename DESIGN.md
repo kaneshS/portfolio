@@ -1,55 +1,51 @@
-# Design: The Marauder's Map
+# Design: Obsidian + Amber
 
-The portfolio is the map. Aged parchment, iron-gall ink, hand-drawn corridors, labelled rooms, and footprints that walk the visitor between places. The interface recedes; the artifact leads.
+Near-black ground, bone type, one warm accent. The page proves the work instead of describing it: the hero is a live diagram of a real pipeline, every project card is an authored system diagram, and the numbers come straight from the resume.
 
 ## Modes
 
-- **Lumos (light, default):** parchment ground, dark ink. Mottled vignette + SVG grain on `body`.
-- **Nox (dark):** the map read by wandlight. Dark leather ground, parchment-coloured ink. Same grammar, inverted.
+- **Dark (default):** `#0b0c0f` ground, `#ecebe6` type, amber `#f5b544`.
+- **Light:** warm paper `#f6f4ef`, `#15161a` type, deeper amber `#c47d0a` for contrast.
 
-Tokens live in `src/app/globals.css` as space-separated RGB triples, mapped in `tailwind.config.ts`.
+Tokens are RGB triples in `src/app/globals.css`, mapped in `tailwind.config.ts`.
 
-| Token | Role | Lumos | Nox |
+| Token | Role | Dark | Light |
 |---|---|---|---|
-| `--bg` | parchment ground | `#e9d9b3` | `#1a140d` |
-| `--bg-deep` | vignette edges | `#ceb786` | `#0a0704` |
-| `--paper` | lighter note / card | `#f1e5c6` | `#261d12` |
-| `--ink` | text, rules | `#2a1a0e` | `#e6d5ae` |
-| `--ink-soft` | secondary text | `#5c4330` | `#bea889` |
-| `--ink-faint` | hairlines, labels | `#8a6d50` | `#806a4c` |
-| `--rule` | frame strokes | `#6e543a` | `#7a6548` |
-| `--wax` | primary action (wax seal) | `#8f2a1f` | `#dc6854` |
-| `--wax-fg` | text on wax | `#f4e8cf` | `#1a140d` |
+| `--bg` | page ground | `#0b0c0f` | `#f6f4ef` |
+| `--surface` | cards, nav pill | `#121419` | `#fffefb` |
+| `--surface-2` | insets, chips, fields | `#181b21` | `#eeebe4` |
+| `--text` | primary type | `#ecebe6` | `#15161a` |
+| `--text-soft` | secondary type | `#a7a69f` | `#5b5c62` |
+| `--text-faint` | labels, hairline text | `#6e6e68` | `#8d8e94` |
+| `--line` | borders at 10–25% alpha | `#ecebe6` | `#15161a` |
+| `--accent` | one accent: actions, live dots, packets | `#f5b544` | `#c47d0a` |
 
-Colour strategy: restrained. Wax red is the single accent and only ever marks an action or a role title.
+Colour strategy: restrained. Amber marks an action, a live state, or a packet in motion. Never decoration.
 
 ## Type
 
-- Display: **IM Fell English SC** (`--font-display`) for headings, nav, buttons, labels.
-- Body: **Alegreya** (`--font-body`), 17px mobile / 18px desktop, 1.6 line height, max 66ch.
-- Handwriting: **Caveat** (`--font-hand`) for margin notes, role titles, quotes. Always rotated ~-2° when used as a note.
-
-All three via `next/font/google`, self-hosted at build.
+- Display: **Bricolage Grotesque** (`--font-display`), weight 500, tracking -0.025em, for headings and numbers.
+- Body: **Geist Sans** (`--font-body`, local file), 16px mobile / 17px desktop.
+- Labels: **Geist Mono** (`--font-mono`, local file), 0.72rem, uppercase, 0.12em tracking (`.label`).
 
 ## Components (`src/components/ui`)
 
-- `Frame` / `.map-frame`: double-ruled box with corner flourishes. `paper` variant sits on `--paper`.
-- `Ribbon`: section label on a notched banner. Used by `Banner` (section titles).
-- `Trail`, `Footprint`: the signature. Footprints step in via `.footprint` + `.in-view` (CSS, 70ms stagger).
-- `Compass`, `WaxSeal`, `Corner`: single-stroke SVG ornaments in `currentColor`.
-- `.btn-wax` (primary) / `.btn-ink` (secondary): 44px min height, press scales to 0.97.
-- `.ink-link`: underline draws left-to-right on hover; `aria-current` keeps it drawn.
-- `InkList`: inline "a · b · c" lists in small caps. No chips.
-- `NoteDialog`: native `<dialog>` styled as a folded note.
-- `.field`: inputs, 16px so iOS does not zoom.
+- `.card` / `.card-inset`: surface with 1px line at 10% alpha, 20px / 12px concentric radii, layered shadow.
+- `FlowDiagram` (`flow-diagram.tsx`): nodes on a grid, bezier edges, SMIL packets. `lanes()` builds a straight pipeline. `compact` for cards. One pause control; paused under reduced motion.
+- `.btn-accent` / `.btn-line` / `.btn-ghost`: pill buttons, 44px min, press scales to 0.97.
+- `.link`: underline draws left to right; `aria-current` keeps it drawn.
+- `Chips`: mono stack chips on `--surface-2`.
+- `Dialog`: native `<dialog>` with blur backdrop.
+- `LocalTime`: live IST clock (nav bento and footer).
+- `.field`: 16px inputs, accent focus ring.
 
 ## Motion
 
-One authored moment: the oath types onto blank parchment, then the page is revealed (`MapReveal`, once per session). Footprints walk the corridors as they enter view. Hero text inks in once. Nothing else fades in on scroll. Easing: `--ease-out: cubic-bezier(0.23,1,0.32,1)`, `--ease-in-out: cubic-bezier(0.77,0,0.175,1)`. Reduced motion keeps opacity only.
+One authored moment: hero lines rise from a mask (`.reveal`, 90ms stagger). Diagram packets loop at 2.6s with a pause button. Cards lift 2px on hover, buttons press. No scroll-triggered fades. Curves: `--ease-out: cubic-bezier(0.23,1,0.32,1)`, `--ease-in-out: cubic-bezier(0.77,0,0.175,1)`. Reduced motion keeps opacity only and pauses packets.
 
 ## Rules
 
-- No kickers/eyebrows above headings; the ribbon is the heading.
-- No gradient text, no glass, no coloured left borders.
-- Icons only from lucide at one stroke weight; map ornaments are authored SVG.
-- Copy stays in the map's voice (corridors, chambers, owl post) but every fact comes from `src/data/resume.json`.
+- No gradient text, no glass as decoration, no coloured left borders, no section numbers.
+- Icons from lucide at one stroke weight; diagrams are authored SVG, not icon tiles.
+- Every number and claim traces to `src/data/resume.json` or `profile.ts`.
+- No portrait on the site; if one is added, it belongs in the hero's right column in place of the diagram card, not beside it.

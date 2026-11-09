@@ -7,10 +7,10 @@ A modern, interactive portfolio website featuring an embedded AI assistant power
 ## Features
 
 - **AI Assistant** - Embedded chatbot using Groq LLM with RAG pipeline for personalized responses
-- **Marauder's Map Theme** - Aged parchment and ink by day (Lumos), the map by wandlight at night (Nox). See [DESIGN.md](DESIGN.md)
-- **The Corridors** - Experience timeline with footprints that walk the corridor as you scroll
+- **Obsidian + Amber** - Near-black ground, bone type, one amber accent; light mode on warm paper. See [DESIGN.md](DESIGN.md)
+- **Live system diagrams** - The hero and every project card are authored SVG pipelines with packets in motion
 - **Architecture Diagrams** - Mermaid.js flowcharts for project architectures
-- **One authored moment** - "I solemnly swear…" reveals the map on first visit; CSS-only motion elsewhere
+- **One authored moment** - Hero lines rise from a mask once; CSS-only motion elsewhere
 - **Responsive Design** - Mobile-first approach with custom cursor effects
 
 ## Tech Stack
@@ -21,7 +21,7 @@ A modern, interactive portfolio website featuring an embedded AI assistant power
 - **Animations:** CSS transitions and keyframes (no animation library)
 - **AI/LLM:** Groq API (GPT-OSS 120B)
 - **Diagrams:** Mermaid.js
-- **Fonts:** IM Fell English SC, Alegreya, Caveat (via next/font)
+- **Fonts:** Bricolage Grotesque (display), Geist Sans and Geist Mono (local)
 
 ## Getting Started
 

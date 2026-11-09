@@ -1,53 +1,99 @@
 import Link from "next/link";
-import { profile } from "@/data/profile";
-import { Compass, Trail, Frame } from "@/components/ui/ornaments";
+import { ArrowRight } from "lucide-react";
+import { FlowDiagram, type FlowSpec } from "@/components/ui/flow-diagram";
+
+/* The hero diagram is the real Spyne pipeline: Kafka topic, workers autoscaled on lag, Redis, FastAPI. */
+const pipeline: FlowSpec = {
+  cols: 4,
+  rows: 3,
+  nodes: [
+    { id: "kafka", label: "Kafka topic", sub: "200K+ images/day", col: 0, row: 1 },
+    { id: "w1", label: "Worker", sub: "multiprocessing", col: 1, row: 0 },
+    { id: "w2", label: "Worker", sub: "multiprocessing", col: 1, row: 1 },
+    { id: "w3", label: "Worker", sub: "scaled on lag", col: 1, row: 2, dashed: true },
+    { id: "redis", label: "Redis", sub: "-60% db load", col: 2, row: 1 },
+    { id: "api", label: "FastAPI", sub: "<100ms p95", col: 3, row: 1 },
+  ],
+  edges: [
+    ["kafka", "w1"],
+    ["kafka", "w2"],
+    ["kafka", "w3"],
+    ["w1", "redis"],
+    ["w2", "redis"],
+    ["w3", "redis"],
+    ["redis", "api"],
+  ],
+};
+
+const stats = [
+  ["6+", "years in production"],
+  ["~5M", "users on one Go backend"],
+  ["200K+", "images a day through Kafka"],
+  ["$600K+", "from one launch, in 2 weeks"],
+];
 
 export function Hero() {
   return (
-    <section className="relative min-h-[100dvh] flex items-center pt-24 pb-16 overflow-hidden" aria-labelledby="hero-title">
-      <div className="container grid lg:grid-cols-12 gap-10 items-center">
-        <div className="lg:col-span-8">
-          <p className="ink-in font-display text-ink-soft text-[0.95rem] md:text-base tracking-wide">
-            Messrs. Python, Go, Kafka &amp; Postgres, purveyors of aids to scalable systems, are proud to present
-          </p>
+    <section className="pt-32 md:pt-40 pb-16 md:pb-20" aria-labelledby="hero-title">
+      <div className="container">
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-8 items-center">
+          <div className="lg:col-span-6">
+            <p className="inline-flex items-center gap-2 text-sm text-text-soft" style={{ animation: "fade-in 600ms ease both" }}>
+              <span className="w-2 h-2 rounded-full bg-accent pulse-dot" aria-hidden="true" />
+              Open to senior backend roles · Gurugram / remote
+            </p>
 
-          <h1 id="hero-title" className="ink-in mt-5 text-[clamp(2.6rem,7.5vw,5.6rem)] leading-[0.98]" data-delay="1">
-            The Marauder&rsquo;s Map
-            <span className="block text-[0.42em] text-ink-soft mt-3">of {profile.name}, {profile.title}</span>
-          </h1>
+            <h1 id="hero-title" className="mt-5 text-[clamp(2.75rem,6.4vw,5rem)]">
+              <span className="reveal block">
+                <span className="block" style={{ ["--i" as string]: 1 }}>Backends that</span>
+              </span>
+              <span className="reveal block">
+                <span className="block" style={{ ["--i" as string]: 2 }}>
+                  hold at <em className="not-italic text-accent">scale.</em>
+                </span>
+              </span>
+            </h1>
 
-          <p className="ink-in mt-7 max-w-[62ch] text-ink-soft text-lg md:text-xl" data-delay="2">
-            Six years of Python and Go backends that carry real load: a Kafka pipeline processing 200K+ images a day, a serverless Go backend for ~5M Telegram users, and a multi‑chain analytics launch that made $600K+ in two weeks.
-          </p>
+            <div className="reveal mt-6">
+              <p className="text-text-soft text-lg md:text-xl max-w-[46ch]" style={{ ["--i" as string]: 3 }}>
+                Senior backend engineer. Python and Go services, event-driven pipelines, and the AWS and GCP infrastructure under them.
+              </p>
+            </div>
 
-          <div className="ink-in mt-9 flex flex-wrap gap-3" data-delay="3">
-            <Link href="#journey" className="btn btn-wax">
-              Explore the map
-            </Link>
-            <Link href="/ai" className="btn btn-ink">
-              Ask the map
-            </Link>
+            <div className="reveal mt-8">
+              <div className="flex flex-wrap gap-3" style={{ ["--i" as string]: 4 }}>
+                <Link href="#contact" className="btn btn-accent">
+                  Start a conversation <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link href="#work" className="btn btn-line">
+                  See the work
+                </Link>
+              </div>
+            </div>
           </div>
 
-          <p className="margin-note mt-10 inline-block">
-            Currently in {profile.location} — open to senior backend roles.
-          </p>
+          <div className="lg:col-span-6">
+            <div className="card p-4 md:p-6 reveal">
+              <div style={{ ["--i" as string]: 3 }}>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="label">Image pipeline · Spyne.ai</span>
+                  <span className="label text-accent">live</span>
+                </div>
+                <FlowDiagram spec={pipeline} title="Kafka topic feeding three workers, one autoscaled on consumer lag, into Redis and a FastAPI layer" />
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div className="hidden lg:flex lg:col-span-4 flex-col items-end gap-8 ink-in" data-delay="3">
-          <Compass className="w-56 xl:w-64 text-ink-faint pointer-events-none select-none mr-6" />
-          <Frame paper className="max-w-xs">
-            <p className="font-display text-sm text-ink mb-3">Legend</p>
-            <dl className="text-[0.95rem] text-ink-soft space-y-2">
-              <div className="flex items-center gap-3"><span className="w-8 h-4 border border-rule/80" aria-hidden="true" /><dd>a chamber: one system, one problem</dd></div>
-              <div className="flex items-center gap-3"><span className="w-8 border-t border-dashed border-rule" aria-hidden="true" /><dd>a corridor: a year in a role</dd></div>
-              <div className="flex items-center gap-3"><span className="w-8 text-center text-ink font-display" aria-hidden="true">· ·</span><dd>footprints: where I have been</dd></div>
-            </dl>
-          </Frame>
-        </div>
+        <dl className="mt-16 md:mt-20 grid grid-cols-2 md:grid-cols-4 gap-x-8 gap-y-8 border-t border-line/10 pt-8">
+          {stats.map(([v, l]) => (
+            <div key={l}>
+              <dt className="font-display text-3xl md:text-4xl tabular-nums tracking-tight">{v}</dt>
+              <dd className="text-sm text-text-soft mt-1">{l}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
-
-      <Trail steps={4} className="absolute left-1/2 -translate-x-1/2 bottom-4 in-view opacity-70" />
     </section>
   );
 }

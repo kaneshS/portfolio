@@ -1,15 +1,34 @@
 "use client";
 
 import { useState } from "react";
-import { ExternalLink, Github } from "lucide-react";
+import { ArrowUpRight, ExternalLink, Github } from "lucide-react";
 import posthog from "posthog-js";
-import { projects, type Project } from "@/data/profile";
-import { Section, Banner } from "@/components/ui/section";
-import { InkList } from "@/components/ui/badge";
+import { projects, freelanceProjects, type Project } from "@/data/profile";
+import { Section, SectionTitle } from "@/components/ui/section";
+import { Chips } from "@/components/ui/badge";
 import { Mermaid } from "@/components/ui/mermaid";
-import { NoteDialog } from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
+import { FlowDiagram, lanes, type FlowSpec } from "@/components/ui/flow-diagram";
 
-const roomNames = ["Great Hall", "Astronomy Tower", "Potions Dungeon", "Room of Requirement"];
+/* Authored diagrams per project; facts match profile.ts. */
+const flows: Record<string, FlowSpec> = {
+  "intract-rewind": lanes([["16 chains", "parallel fetchers"], ["Normalize", "one schema"], ["Aggregate", "per wallet"], ["Analytics API", "$600K+ launch"]]),
+  "telegram-backend": lanes([["API Gateway", "~5M users"], ["Lambda", "Go runtime"], ["Kinesis", "40K DAU"], ["MongoDB", "processors"]]),
+  "ai-image-pipeline": lanes([["Upload", "50+ clients"], ["Kafka", "200K+/day"], ["Workers", "autoscaled"], ["Delivery", "<100ms API"]]),
+  "web3-assistant": {
+    cols: 4,
+    rows: 3,
+    nodes: [
+      { id: "q", label: "Wallet query", sub: "MetaMask", col: 0, row: 1 },
+      { id: "r", label: "Router", sub: "intent", col: 1, row: 1 },
+      { id: "a1", label: "RAG agent", sub: "ChromaDB", col: 2, row: 0 },
+      { id: "a2", label: "Chain agent", sub: "on-chain", col: 2, row: 1 },
+      { id: "a3", label: "Social agent", col: 2, row: 2 },
+      { id: "s", label: "SSE stream", sub: "<1s", col: 3, row: 1 },
+    ],
+    edges: [["q", "r"], ["r", "a1"], ["r", "a2"], ["r", "a3"], ["a1", "s"], ["a2", "s"], ["a3", "s"]],
+  },
+};
 
 export function Projects() {
   const [selected, setSelected] = useState<Project | null>(null);
@@ -20,79 +39,90 @@ export function Projects() {
   };
 
   return (
-    <Section id="projects">
-      <Banner title="The Chambers" note="rooms built for one problem each" />
+    <Section id="work">
+      <SectionTitle title="Selected work" note="Systems that carried real load. Each one opens with the problem, the architecture and the numbers." />
 
-      <div className="relative grid md:grid-cols-2 gap-6 md:gap-8">
-        {/* passages between the rooms */}
-        <div className="hidden md:block absolute inset-x-1/2 top-[20%] bottom-[20%] w-px border-l border-dashed border-rule/60" aria-hidden="true" />
-        <div className="hidden md:block absolute inset-y-1/2 left-[12%] right-[12%] h-px border-t border-dashed border-rule/60" aria-hidden="true" />
-
-        {projects.map((p, i) => (
-          <button
-            key={p.id}
-            onClick={() => open(p)}
-            className="relative text-left map-frame on-paper lift p-6 md:p-7 flex flex-col"
-            aria-haspopup="dialog"
-          >
-            <span className="font-display text-xs text-ink-faint tracking-widest uppercase">{roomNames[i % roomNames.length]}</span>
-            <h3 className="text-2xl mt-1 text-ink">{p.title}</h3>
-            <p className="text-ink-soft mt-2 text-[0.95rem]">{p.description}</p>
-
-            <dl className="mt-5 flex flex-wrap gap-x-6 gap-y-2">
+      <div className="grid lg:grid-cols-2 gap-4 md:gap-5">
+        {projects.map((p) => (
+          <button key={p.id} onClick={() => open(p)} className="card lift text-left p-5 md:p-6 flex flex-col group" aria-haspopup="dialog">
+            <div className="card-inset p-3 md:p-4 overflow-hidden">
+              <FlowDiagram spec={flows[p.id]} title={`${p.title} architecture`} packets={false} compact />
+            </div>
+            <div className="mt-5 flex items-start justify-between gap-4">
+              <div>
+                <h3 className="font-display text-2xl">{p.title}</h3>
+                <p className="text-text-soft mt-1 text-[0.95rem]">{p.description}</p>
+              </div>
+              <ArrowUpRight className="w-5 h-5 shrink-0 text-text-faint group-hover:text-accent transition-colors mt-1" />
+            </div>
+            <dl className="mt-4 flex flex-wrap gap-x-6 gap-y-2">
               {p.metrics.slice(0, 3).map((m) => (
                 <div key={m.label}>
                   <dt className="sr-only">{m.label}</dt>
-                  <dd className="font-display text-xl text-ink tabular-nums leading-none">{m.value}</dd>
-                  <dd className="text-xs text-ink-faint mt-1">{m.label}</dd>
+                  <dd className="font-display text-xl tabular-nums leading-none">{m.value}</dd>
+                  <dd className="label mt-1 normal-case tracking-normal text-[0.72rem]">{m.label}</dd>
                 </div>
               ))}
             </dl>
-
-            <InkList items={p.technologies.slice(0, 5)} className="mt-auto pt-5" />
-            <span className="ink-link self-start mt-3 font-display text-sm text-ink">Enter the chamber →</span>
+            <Chips items={p.technologies.slice(0, 5)} className="mt-auto pt-5" />
           </button>
         ))}
       </div>
 
-      <NoteDialog open={!!selected} onClose={() => setSelected(null)} title={selected?.title ?? "Project"}>
+      <div className="mt-12 md:mt-16 border-t border-line/10 pt-8">
+        <span className="label">Also built</span>
+        <ul className="mt-4 divide-y divide-line/10">
+          {freelanceProjects.map((f) => (
+            <li key={f.id} className="py-4 grid md:grid-cols-12 gap-2 md:gap-6">
+              <div className="md:col-span-4">
+                <p className="font-display text-lg leading-tight">{f.title}</p>
+                <p className="text-sm text-text-faint">{f.client} · {f.period}</p>
+              </div>
+              <p className="md:col-span-5 text-[0.95rem] text-text-soft">{f.description}</p>
+              <p className="md:col-span-3 font-mono text-xs text-text-faint md:text-right">{f.technologies.slice(0, 4).join(" · ")}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <Dialog open={!!selected} onClose={() => setSelected(null)} title={selected?.title ?? "Project"}>
         {selected && (
           <article>
-            <h2 className="text-3xl">{selected.title}</h2>
-            <p className="text-ink-soft mt-2">{selected.description}</p>
+            <h2 className="font-display text-3xl pr-10">{selected.title}</h2>
+            <p className="text-text-soft mt-2">{selected.description}</p>
 
-            <dl className="mt-6 grid grid-cols-3 gap-4 rule-dashed pt-5">
+            <dl className="mt-6 grid grid-cols-3 gap-4 card-inset p-4">
               {selected.metrics.map((m) => (
                 <div key={m.label}>
-                  <dd className="font-display text-2xl text-ink tabular-nums">{m.value}</dd>
-                  <dt className="text-xs text-ink-faint">{m.label}</dt>
+                  <dd className="font-display text-2xl tabular-nums">{m.value}</dd>
+                  <dt className="label mt-1">{m.label}</dt>
                 </div>
               ))}
             </dl>
 
-            <h3 className="font-display text-sm mt-8 mb-2 tracking-wide">The problem</h3>
-            <p className="text-ink-soft">{selected.problem}</p>
+            <h3 className="label mt-8 mb-2">The problem</h3>
+            <p className="text-text-soft">{selected.problem}</p>
 
-            <h3 className="font-display text-sm mt-8 mb-2 tracking-wide">The plan of the room</h3>
-            <p className="text-ink-soft mb-4">{selected.architecture}</p>
+            <h3 className="label mt-8 mb-2">Architecture</h3>
+            <p className="text-text-soft mb-4">{selected.architecture}</p>
             {selected.architectureDiagram && (
-              <div className="map-frame p-3">
+              <div className="card-inset p-3">
                 <Mermaid chart={selected.architectureDiagram} />
               </div>
             )}
 
-            <h3 className="font-display text-sm mt-8 mb-2 tracking-wide">Built with</h3>
-            <InkList items={selected.technologies} />
+            <h3 className="label mt-8 mb-3">Built with</h3>
+            <Chips items={selected.technologies} />
 
             {(selected.link || selected.github) && (
               <div className="flex gap-3 mt-8">
                 {selected.link && (
-                  <a href={selected.link} target="_blank" rel="noopener noreferrer" className="btn btn-wax">
+                  <a href={selected.link} target="_blank" rel="noopener noreferrer" className="btn btn-accent">
                     <ExternalLink className="w-4 h-4" /> Visit
                   </a>
                 )}
                 {selected.github && (
-                  <a href={selected.github} target="_blank" rel="noopener noreferrer" className="btn btn-ink">
+                  <a href={selected.github} target="_blank" rel="noopener noreferrer" className="btn btn-line">
                     <Github className="w-4 h-4" /> Source
                   </a>
                 )}
@@ -100,7 +130,7 @@ export function Projects() {
             )}
           </article>
         )}
-      </NoteDialog>
+      </Dialog>
     </Section>
   );
 }

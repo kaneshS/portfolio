@@ -1,20 +1,14 @@
 import { cn } from "@/lib/utils";
 
-/* Inline inventory list: "Python · Go · Kafka" in small caps, no chips. */
-export function InkList({ items, className }: { items: string[]; className?: string }) {
+/* Mono chips for stacks. */
+export function Chips({ items, className }: { items: string[]; className?: string }) {
   return (
-    <p className={cn("font-display text-[0.85rem] text-ink-soft leading-relaxed", className)}>
-      {items.map((item, i) => (
-        <span key={item}>
-          <span className="whitespace-nowrap">{item}</span>
-          {i < items.length - 1 && (
-            <>
-              {" "}
-              <span className="text-ink-faint" aria-hidden="true">·</span>{" "}
-            </>
-          )}
-        </span>
+    <ul className={cn("flex flex-wrap gap-1.5", className)}>
+      {items.map((item) => (
+        <li key={item} className="font-mono text-[0.72rem] tracking-wide text-text-soft px-2 py-1 rounded-md bg-surface-2 border border-line/10 whitespace-nowrap">
+          {item}
+        </li>
       ))}
-    </p>
+    </ul>
   );
 }
