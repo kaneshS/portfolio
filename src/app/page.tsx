@@ -1,10 +1,8 @@
 import { Hero } from "@/components/sections/hero";
-import { About } from "@/components/sections/about";
-import { ExperienceJourney } from "@/components/sections/experience-journey";
+import { AskBox } from "@/components/sections/ask-box";
 import { Projects } from "@/components/sections/projects";
-import { Freelance } from "@/components/sections/freelance";
-import { Skills } from "@/components/sections/skills";
-import { AICta } from "@/components/sections/ai-cta";
+import { Experience } from "@/components/sections/experience";
+import { Stack } from "@/components/sections/stack";
 import { Contact } from "@/components/sections/contact";
 import { Footer } from "@/components/footer";
 
@@ -12,12 +10,10 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <About />
-      <ExperienceJourney />
+      <AskBox />
       <Projects />
-      <Freelance />
-      <Skills />
-      <AICta />
+      <Experience />
+      <Stack />
       <Contact />
       <Footer />
     </>

@@ -3,18 +3,16 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTheme } from "@/components/theme-provider";
-import { Footprint } from "@/components/ui/ornaments";
 
 const navItems = [
-  { label: "The Walker", href: "/#about", id: "about" },
-  { label: "Corridors", href: "/#journey", id: "journey" },
-  { label: "Chambers", href: "/#projects", id: "projects" },
-  { label: "Inventory", href: "/#skills", id: "skills" },
-  { label: "Ask the Map", href: "/ai", id: "ai-page" },
-  { label: "Owl Post", href: "/#contact", id: "contact" },
+  { label: "~/work", href: "/#work", id: "work" },
+  { label: "~/experience", href: "/#experience", id: "experience" },
+  { label: "~/stack", href: "/#stack", id: "stack" },
+  { label: "~/ai", href: "/ai", id: "ai-page" },
+  { label: "~/contact", href: "/#contact", id: "contact" },
 ];
 
 export function Navigation() {
@@ -31,7 +29,6 @@ export function Navigation() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // "You are here": track the section in view
   useEffect(() => {
     if (pathname !== "/") return setActive("ai-page");
     const ids = navItems.map((n) => n.id).filter((id) => id !== "ai-page");
@@ -41,7 +38,7 @@ export function Navigation() {
         const hit = entries.filter((e) => e.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
         if (hit) setActive(hit.target.id);
       },
-      { rootMargin: "-40% 0px -50% 0px", threshold: [0, 0.2, 0.5] }
+      { rootMargin: "-25% 0px -55% 0px", threshold: [0, 0.2, 0.5] }
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
@@ -57,63 +54,59 @@ export function Navigation() {
   const ThemeButton = (
     <button
       onClick={toggleTheme}
-      className="btn btn-ink !min-h-[40px] !px-3 !py-1 text-[0.8rem]"
-      aria-label={theme === "dark" ? "Switch to parchment (light) theme" : "Switch to wandlight (dark) theme"}
+      className="btn btn-ghost btn-icon"
+      aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
       aria-pressed={theme === "dark"}
     >
-      {mounted ? (theme === "dark" ? "Lumos" : "Nox") : " "}
+      {mounted ? theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" /> : <span className="w-4 h-4" />}
     </button>
   );
 
   return (
     <>
-    <header
-      className={cn(
-        "fixed top-0 inset-x-0 z-50 transition-[background-color,box-shadow] duration-200",
-        scrolled || open ? "bg-bg/95 backdrop-blur-sm shadow-[0_1px_0_rgb(var(--rule)/0.5)]" : ""
-      )}
-      style={{ paddingTop: "env(safe-area-inset-top)" }}
-    >
-      <nav className="container flex items-center justify-between h-16" aria-label="Primary">
-        <Link href="/" className="font-display text-xl text-ink inline-flex items-center gap-2 rounded">
-          <Footprint className="w-4 h-5 text-wax" />
-          K. Sharma
-        </Link>
+      <header
+        className={cn("fixed top-0 inset-x-0 z-50 transition-[background-color,border-color] duration-200 border-b", scrolled || open ? "bg-bg/95 border-rule" : "border-transparent")}
+        style={{ paddingTop: "env(safe-area-inset-top)" }}
+      >
+        <nav className="container flex items-center justify-between h-16" aria-label="Primary">
+          <Link href="/" className="inline-flex items-center gap-2.5 text-[0.95rem] font-medium text-fg rounded min-h-[44px]" translate="no">
+            <span className="dot" aria-hidden="true" />
+            <span className="text-fg-faint">~/</span>kaneshwar
+          </Link>
 
-        <ul className="hidden md:flex items-center gap-7">
-          {navItems.map((item) => (
-            <li key={item.href}>
-              <Link href={item.href} className="ink-link font-display text-[0.95rem] text-ink-soft hover:text-ink" aria-current={active === item.id ? "true" : undefined}>
-                {item.label}
-              </Link>
-            </li>
-          ))}
-          <li>{ThemeButton}</li>
-        </ul>
+          <ul className="hidden md:flex items-center gap-6">
+            {navItems.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href} className="t-link text-[0.85rem] text-fg-dim hover:text-fg py-2 inline-block" aria-current={active === item.id ? (item.id === "ai-page" ? "page" : "true") : undefined}>
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+            <li>{ThemeButton}</li>
+          </ul>
 
-        <div className="flex items-center gap-2 md:hidden">
-          {ThemeButton}
-          <button
-            onClick={() => setOpen((o) => !o)}
-            className="p-2 -mr-2 rounded min-h-[44px] min-w-[44px] inline-flex items-center justify-center"
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-          >
-            {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
-        </div>
-      </nav>
+          <div className="flex items-center gap-2 md:hidden">
+            {ThemeButton}
+            <button
+              onClick={() => setOpen((o) => !o)}
+              className="btn btn-ghost btn-icon"
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+            >
+              {open ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+            </button>
+          </div>
+        </nav>
+      </header>
 
-    </header>
       {open && (
         <div id="mobile-menu" className="md:hidden fixed inset-x-0 top-16 bottom-0 z-40 bg-bg overflow-y-auto" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
           <ul className="container py-6 flex flex-col">
-            {navItems.map((item, i) => (
-              <li key={item.href} className="border-b border-rule/40">
-                <Link href={item.href} onClick={() => setOpen(false)} className="flex items-center gap-3 py-4 font-display text-2xl text-ink">
-                  <Footprint left={i % 2 === 0} className="w-4 h-5 text-ink-faint" />
-                  {item.label}
+            {navItems.map((item) => (
+              <li key={item.href} className="border-b border-rule">
+                <Link href={item.href} onClick={() => setOpen(false)} className="flex items-center gap-3 py-4 min-h-[56px] text-xl text-fg" aria-current={active === item.id ? "true" : undefined}>
+                  <span className="prompt" aria-hidden="true">$</span> cd {item.label}
                 </Link>
               </li>
             ))}

@@ -5,13 +5,13 @@ import { createContext, useContext, useEffect, useState } from "react";
 type Theme = "light" | "dark";
 
 const ThemeContext = createContext<{ theme: Theme; toggleTheme: () => void; mounted: boolean }>({
-  theme: "light",
+  theme: "dark",
   toggleTheme: () => {},
   mounted: false,
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     try {
       saved = localStorage.getItem("theme") as Theme | null;
     } catch {}
-    const t = saved ?? "light";
+    const t = saved ?? "dark";
     setTheme(t);
     document.documentElement.classList.toggle("dark", t === "dark");
   }, []);

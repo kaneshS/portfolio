@@ -228,8 +228,8 @@ export const freelanceProjects: FreelanceProject[] = [
     deliverables: [
       "Next.js 14 App Router with TypeScript",
       "AI chatbot with Groq LLM and RAG pipeline",
-      "Marauder's Map theme with light and dark modes",
-      "Footprint timeline that walks the visitor through each role",
+      "Terminal theme with light and dark modes",
+      "git-log style experience list and tree-style stack",
       "Responsive design with custom cursor effects",
     ],
     technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Groq API", "Mermaid"],

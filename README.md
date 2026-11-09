@@ -6,12 +6,12 @@ A modern, interactive portfolio website featuring an embedded AI assistant power
 
 ## Features
 
-- **AI Assistant** - Embedded chatbot using Groq LLM with RAG pipeline for personalized responses
-- **Marauder's Map Theme** - Aged parchment and ink by day (Lumos), the map by wandlight at night (Nox). See [DESIGN.md](DESIGN.md)
-- **The Corridors** - Experience timeline with footprints that walk the corridor as you scroll
-- **Architecture Diagrams** - Mermaid.js flowcharts for project architectures
-- **One authored moment** - "I solemnly swear…" reveals the map on first visit; CSS-only motion elsewhere
-- **Responsive Design** - Mobile-first approach with custom cursor effects
+- **AI Assistant** - Embedded chatbot using Groq LLM with RAG pipeline for personalized responses; `/ai` opens as a greeting with five preset chips and becomes a terminal transcript after the first question
+- **Terminal Theme** - Near-black ground with a dotted grid, Geist Mono everywhere, one phosphor-green accent; light mode is a paper-white terminal. See [DESIGN.md](DESIGN.md)
+- **Shell Grammar** - Projects as `ls -al` rows, experience as `git log --oneline`, skills as `tree` output, every section headed `01 FEATURED WORK · ~/projects/featured`
+- **Architecture Diagrams** - Mermaid.js flowcharts for project architectures, restyled to the palette
+- **One authored moment** - The hero name types in once with a blinking caret; CSS-only motion elsewhere, reduced-motion safe
+- **Responsive Design** - Mobile-first, 44px targets, full-screen mobile menu
 
 ## Tech Stack
 
@@ -21,7 +21,7 @@ A modern, interactive portfolio website featuring an embedded AI assistant power
 - **Animations:** CSS transitions and keyframes (no animation library)
 - **AI/LLM:** Groq API (GPT-OSS 120B)
 - **Diagrams:** Mermaid.js
-- **Fonts:** IM Fell English SC, Alegreya, Caveat (via next/font)
+- **Fonts:** Geist Mono (local, via next/font/local)
 
 ## Getting Started
 
@@ -76,15 +76,12 @@ src/
 
 ## Sections
 
-- **Hero** - Introduction with animated text and CTAs
-- **About** - Personal narrative with experience stats
-- **Experience Journey** - Interactive S-curve timeline with footstep animations
-- **Projects** - Featured projects with architecture diagrams
-- **Freelance** - Freelance project showcase
-- **Skills** - Technical skills and expertise
-- **AI Assistant** - Chat interface for portfolio Q&A
-- **Contact** - Contact form and social links
-
+- **Hero** - `$ hi, I'm Kanesh`, role line, summary from the resume, CTAs and social links
+- **Ask box** - Terminal window that sends a question to `/ai?q=…`
+- **01 Featured Work** - Project rows that open a dialog with metrics and a Mermaid diagram
+- **02 Experience** - `git log`-style role list, each opening a dialog with achievements
+- **03 Stack** - Every skill group from the resume as `tree` output
+- **04 Get in Touch** - Email, key-value contact block, Web3Forms contact form in a dialog
 
 ## License
 

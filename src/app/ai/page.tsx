@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
-import { Send, Loader2 } from "lucide-react";
+import { Suspense, useState, useRef, useEffect, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
+import { CornerDownLeft, Loader2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import posthog from "posthog-js";
-import { Footprint, Frame } from "@/components/ui/ornaments";
 
 interface Message {
   id: string;
@@ -13,26 +13,37 @@ interface Message {
   isError?: boolean;
 }
 
-const suggestedQuestions = [
-  "What kind of backend work have you done?",
-  "Tell me about your GCP and AWS experience",
-  "What scale systems have you built?",
-  "What AI and Web3 projects have you worked on?",
-  "Tell me about your experience with Kafka",
-  "What databases have you worked with?",
+const chips: { label: string; q: string }[] = [
+  { label: "Me", q: "Who is Kanesh and what does he do?" },
+  { label: "Projects", q: "What projects has Kanesh built, and at what scale?" },
+  { label: "Skills", q: "What are Kanesh's strongest skills?" },
+  { label: "Stack", q: "What is Kanesh's tech stack?" },
+  { label: "Contact", q: "How can I contact Kanesh?" },
 ];
+const suggestedQuestions = chips.map((c) => c.q);
 
 export default function AIPage() {
+  return (
+    <Suspense fallback={null}>
+      <Chat />
+    </Suspense>
+  );
+}
+
+function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showTyping, setShowTyping] = useState(false);
   const [reportStatus, setReportStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const endRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const displayedRef = useRef("");
   const fullRef = useRef("");
   const typingRef = useRef<NodeJS.Timeout | null>(null);
   const isStreamingRef = useRef(false);
+  const sentFromUrl = useRef(false);
+  const params = useSearchParams();
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -140,7 +151,7 @@ export default function AIPage() {
         setShowTyping(false);
         setMessages((prev) => [
           ...prev,
-          { id: assistantId, role: "assistant", content: "The map is not answering right now. You can report this so Kaneshwar hears about it.", isError: true },
+          { id: assistantId, role: "assistant", content: "error: the assistant is not responding right now. You can report this so Kaneshwar hears about it.", isError: true },
         ]);
         setReportStatus("idle");
       } finally {
@@ -150,6 +161,15 @@ export default function AIPage() {
     },
     [isLoading]
   );
+
+  // /ai?q=… from the home-page ask box: send once on mount
+  useEffect(() => {
+    const q = params.get("q");
+    if (q && !sentFromUrl.current) {
+      sentFromUrl.current = true;
+      sendMessage(q);
+    }
+  }, [params, sendMessage]);
 
   const sendErrorReport = useCallback(async () => {
     setReportStatus("sending");
@@ -171,113 +191,122 @@ export default function AIPage() {
     }
   }, []);
 
-  const remaining = suggestedQuestions.filter((q) => !messages.some((m) => m.role === "user" && m.content === q));
+  const started = messages.length > 0 || showTyping;
 
-  return (
-    <div className="min-h-[100dvh] pt-24 pb-8" style={{ paddingBottom: "max(2rem, env(safe-area-inset-bottom))" }}>
-      <div className="container max-w-4xl">
-        <header className="mb-6 ink-in">
-          <h1 className="text-4xl md:text-5xl">Ask the map</h1>
-          <p className="text-ink-soft mt-2 max-w-[56ch]">It answers from what is written on this map and nothing else. Ask about systems, scale, stacks or decisions.</p>
-        </header>
+  const form = (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        sendMessage(input);
+      }}
+      className="term flex items-center gap-2 px-3 py-1.5"
+    >
+      <label htmlFor="q" className="prompt text-base shrink-0">›</label>
+      <input ref={inputRef} id="q" type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder={started ? "ask a follow-up…" : "ask anything about Kanesh…"} disabled={isLoading} autoComplete="off" autoFocus={!started} className="field !border-0 !bg-transparent !px-1 focus:!shadow-none" />
+      <button type="submit" disabled={!input.trim() || isLoading} className="btn btn-primary !min-h-[40px] !px-3 text-[0.8rem] shrink-0 disabled:opacity-40" aria-label="Send">
+        {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <CornerDownLeft className="w-4 h-4" />}
+      </button>
+    </form>
+  );
 
-        <Frame paper className="p-0 ink-in" data-delay="1">
-          <div className="h-[56dvh] min-h-[22rem] overflow-y-auto p-5 md:p-8 space-y-6" style={{ overscrollBehavior: "contain" }} aria-live="polite" aria-busy={isLoading}>
-            {messages.length === 0 && !showTyping ? (
-              <div className="h-full flex flex-col justify-center">
-                <p className="font-hand text-2xl text-ink-soft mb-6">Some questions people ask first:</p>
-                <ul className="grid sm:grid-cols-2 gap-2">
-                  {suggestedQuestions.map((q) => (
-                    <li key={q}>
-                      <button onClick={() => sendMessage(q)} disabled={isLoading} className="w-full text-left px-4 py-3 min-h-[44px] rounded-[2px] border border-rule/60 text-[0.95rem] text-ink hover:border-ink hover:bg-ink/5 transition-colors disabled:opacity-50">
-                        {q}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ) : (
-              <>
-                {messages.map((m) => (
-                  <div key={m.id} className={`flex gap-3 ${m.role === "user" ? "flex-row-reverse" : ""}`}>
-                    <div className="shrink-0 w-8 h-8 mt-1 flex items-center justify-center" aria-hidden="true">
-                      {m.role === "assistant" ? <Footprint className={`w-5 h-6 ${m.isError ? "text-wax" : "text-ink"}`} /> : <span className="font-display text-ink-faint">you</span>}
-                    </div>
-                    <div className={`max-w-[80%] px-4 py-3 rounded-[2px] ${m.role === "user" ? "bg-ink text-bg" : m.isError ? "border border-wax/60 text-ink" : "bg-bg/60 text-ink"}`}>
-                      {m.role === "assistant" ? (
-                        <div className="prose prose-sm md:prose-base max-w-none prose-p:my-1.5 prose-ul:my-1.5 prose-li:my-0.5 text-ink prose-headings:font-display prose-headings:font-normal prose-strong:text-ink prose-a:text-wax">
-                          <ReactMarkdown
-                            components={{
-                              a: ({ href, children }) => (
-                                <a href={href} target="_blank" rel="noopener noreferrer">
-                                  {children}
-                                </a>
-                              ),
-                            }}
-                          >
-                            {m.content.replace(/<br\s*\/?>/gi, "\n")}
-                          </ReactMarkdown>
-                        </div>
-                      ) : (
-                        <p className="whitespace-pre-wrap">{m.content}</p>
-                      )}
+  if (!started) {
+    return (
+      <div className="min-h-[100dvh] flex flex-col justify-center pt-24 pb-12" style={{ paddingBottom: "max(3rem, env(safe-area-inset-bottom))" }}>
+        <div className="container max-w-2xl text-center">
+          <p className="inline-flex items-center gap-2 text-[0.75rem] text-fg-faint"><span className="dot" aria-hidden="true" /> ~/ask-me.sh · ready</p>
+          <h1 className="mt-5 text-[clamp(1.75rem,5vw,2.75rem)] font-medium">Hi, I&rsquo;m Kanesh&rsquo;s assistant.</h1>
+          <p className="mt-3 text-fg-dim max-w-[48ch] mx-auto">I answer from his resume and project notes only. Ask about systems, scale, stacks or decisions.</p>
 
-                      {m.isError && (
-                        <div className="mt-3 pt-3 border-t border-wax/30 text-sm">
-                          {reportStatus === "sent" ? (
-                            <p className="font-hand text-lg">Reported. Thank you.</p>
-                          ) : reportStatus === "error" ? (
-                            <p className="text-wax">The report did not send. Email works too.</p>
-                          ) : (
-                            <button onClick={sendErrorReport} disabled={reportStatus === "sending"} className="btn btn-ink !min-h-[36px] !py-1 text-sm">
-                              {reportStatus === "sending" ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-                              {reportStatus === "sending" ? "Sending…" : "Report this"}
-                            </button>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                ))}
-                {showTyping && (
-                  <div className="flex gap-3 items-center text-ink-faint">
-                    <Footprint className="w-5 h-6 text-ink" />
-                    <span className="font-hand text-xl">the ink is drying…</span>
-                  </div>
-                )}
-              </>
-            )}
-            <div ref={endRef} />
-          </div>
+          <div className="mt-8 text-left">{form}</div>
 
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              sendMessage(input);
-            }}
-            className="border-t border-rule/50 p-3 md:p-4 flex gap-2"
-          >
-            <label htmlFor="q" className="sr-only">Your question</label>
-            <input id="q" type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask about a system, a stack, a decision…" disabled={isLoading} autoComplete="off" className="field" />
-            <button type="submit" disabled={!input.trim() || isLoading} className="btn btn-wax shrink-0" aria-label="Send">
-              <Send className="w-4 h-4" />
-            </button>
-          </form>
-        </Frame>
-
-        {messages.length > 0 && !isLoading && remaining.length > 0 && (
-          <ul className="mt-4 flex flex-wrap gap-2">
-            {remaining.slice(0, 3).map((q) => (
-              <li key={q}>
-                <button onClick={() => sendMessage(q)} className="px-3 py-2 min-h-[40px] text-sm border border-rule/60 rounded-[2px] hover:border-ink hover:bg-ink/5 transition-colors">
-                  {q}
+          <ul className="mt-5 flex flex-wrap justify-center gap-2">
+            {chips.map((c) => (
+              <li key={c.label}>
+                <button onClick={() => sendMessage(c.q)} className="btn btn-ghost !min-h-[40px] text-[0.85rem] text-fg-dim">
+                  <span className="prompt">$</span> {c.label.toLowerCase()}
                 </button>
               </li>
             ))}
           </ul>
-        )}
+        </div>
+      </div>
+    );
+  }
 
-        <p className="mt-4 font-display text-xs text-ink-faint">Answers come from this portfolio only.</p>
+  return (
+    <div className="h-[100dvh] pt-24 flex flex-col" style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}>
+      <div className="container max-w-3xl flex-1 min-h-0 flex flex-col">
+        <div className="term flex-1 min-h-0 flex flex-col">
+          <div className="term-bar">
+            <span className="term-lights" aria-hidden="true"><i /><i /><i /></span>
+            <h1 className="mx-auto text-[0.75rem] font-normal">~/ask-me.sh</h1>
+            <span className="inline-flex items-center gap-1.5 text-accent"><span className="dot" aria-hidden="true" /> {isLoading ? "thinking" : "ready"}</span>
+          </div>
+
+          <div className="flex-1 min-h-0 overflow-y-auto p-4 md:p-6 space-y-6 text-[0.95rem]" style={{ overscrollBehavior: "contain" }} aria-live="polite" aria-busy={isLoading}>
+            {messages.map((m) =>
+              m.role === "user" ? (
+                <p key={m.id} className="msg-user whitespace-pre-wrap font-medium">{m.content}</p>
+              ) : (
+                <div key={m.id} className={m.isError ? "border-l border-accent pl-4" : "pl-4 border-l border-rule"}>
+                  <div className="prose prose-sm md:prose-base max-w-none prose-p:my-1.5 prose-ul:my-1.5 prose-li:my-0.5 text-fg-dim prose-headings:font-medium prose-headings:text-fg prose-strong:text-fg prose-a:text-accent prose-code:text-fg prose-li:marker:text-accent">
+                    <ReactMarkdown
+                      components={{
+                        a: ({ href, children }) => (
+                          <a href={href} target="_blank" rel="noopener noreferrer">
+                            {children}
+                          </a>
+                        ),
+                      }}
+                    >
+                      {m.content.replace(/<br\s*\/?>/gi, "\n")}
+                    </ReactMarkdown>
+                  </div>
+
+                  {m.isError && (
+                    <div className="mt-3 text-sm">
+                      {reportStatus === "sent" ? (
+                        <p className="text-accent">✓ reported. Thank you.</p>
+                      ) : reportStatus === "error" ? (
+                        <p className="text-fg-dim">The report did not send. Email works too.</p>
+                      ) : (
+                        <button onClick={sendErrorReport} disabled={reportStatus === "sending"} className="btn btn-ghost !min-h-[36px] !py-1 text-sm">
+                          {reportStatus === "sending" ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                          {reportStatus === "sending" ? "sending…" : "report this"}
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )
+            )}
+            {showTyping && (
+              <p className="text-fg-faint pl-4 border-l border-rule">
+                <span className="caret" aria-hidden="true" /> <span className="sr-only">thinking</span>
+              </p>
+            )}
+            <div ref={endRef} />
+          </div>
+
+          <div className="border-t border-rule p-2 md:p-3">
+            <div className="[&>form]:border-0 [&>form]:shadow-none [&>form]:bg-transparent">{form}</div>
+          </div>
+        </div>
+
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[0.75rem] text-fg-faint">
+          <p>answers come from this portfolio only</p>
+          {!isLoading && (
+            <ul className="flex flex-wrap gap-1.5">
+              {chips.filter((c) => !messages.some((m) => m.role === "user" && m.content === c.q)).slice(0, 3).map((c) => (
+                <li key={c.label}>
+                  <button onClick={() => sendMessage(c.q)} className="btn btn-ghost !min-h-[32px] !py-0 !px-2.5 text-[0.75rem] text-fg-dim">
+                    {c.label.toLowerCase()}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </div>
   );

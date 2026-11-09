@@ -4,12 +4,9 @@ import { useState } from "react";
 import { ExternalLink, Github } from "lucide-react";
 import posthog from "posthog-js";
 import { projects, type Project } from "@/data/profile";
-import { Section, Banner } from "@/components/ui/section";
-import { InkList } from "@/components/ui/badge";
+import { Section, SectionHead } from "@/components/ui/section";
 import { Mermaid } from "@/components/ui/mermaid";
-import { NoteDialog } from "@/components/ui/dialog";
-
-const roomNames = ["Great Hall", "Astronomy Tower", "Potions Dungeon", "Room of Requirement"];
+import { TermDialog } from "@/components/ui/dialog";
 
 export function Projects() {
   const [selected, setSelected] = useState<Project | null>(null);
@@ -20,87 +17,81 @@ export function Projects() {
   };
 
   return (
-    <Section id="projects">
-      <Banner title="The Chambers" note="rooms built for one problem each" />
+    <Section id="work">
+      <SectionHead num="01" title="Featured work" path="~/projects/featured">
+        <p className="mt-6 text-fg-dim text-[0.9rem]">
+          <span className="prompt">$</span> ls -al projects/ <span className="text-fg-faint">{"// "}{projects.length} entries, each opens a dialog</span>
+        </p>
+      </SectionHead>
 
-      <div className="relative grid md:grid-cols-2 gap-6 md:gap-8">
-        {/* passages between the rooms */}
-        <div className="hidden md:block absolute inset-x-1/2 top-[20%] bottom-[20%] w-px border-l border-dashed border-rule/60" aria-hidden="true" />
-        <div className="hidden md:block absolute inset-y-1/2 left-[12%] right-[12%] h-px border-t border-dashed border-rule/60" aria-hidden="true" />
+      <ul>
+        {projects.map((p) => {
+          const m = p.metrics[0];
+          return (
+            <li key={p.id}>
+              <button onClick={() => open(p)} className="row grid-cols-[1fr_auto] md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)_minmax(0,1.4fr)_auto]" aria-haspopup="dialog">
+                <span className="min-w-0">
+                  <span className="block text-fg font-medium truncate">{p.title}</span>
+                  <span className="block md:hidden text-fg-dim text-[0.85rem] mt-0.5">{m.value} {m.label.toLowerCase()}</span>
+                </span>
+                <span className="hidden md:block text-fg-dim text-[0.9rem] truncate">
+                  <span className="text-fg">{m.value}</span> {m.label.toLowerCase()}
+                </span>
+                <span className="hidden md:block text-fg-faint text-[0.85rem] truncate">{p.technologies.slice(0, 4).join(" · ")}</span>
+                <span className="arrow text-fg-faint" aria-hidden="true">↗</span>
+                <span className="col-span-2 md:hidden text-fg-faint text-[0.8rem] truncate">{p.technologies.slice(0, 4).join(" · ")}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
 
-        {projects.map((p, i) => (
-          <button
-            key={p.id}
-            onClick={() => open(p)}
-            className="relative text-left map-frame on-paper lift p-6 md:p-7 flex flex-col"
-            aria-haspopup="dialog"
-          >
-            <span className="font-display text-xs text-ink-faint tracking-widest uppercase">{roomNames[i % roomNames.length]}</span>
-            <h3 className="text-2xl mt-1 text-ink">{p.title}</h3>
-            <p className="text-ink-soft mt-2 text-[0.95rem]">{p.description}</p>
-
-            <dl className="mt-5 flex flex-wrap gap-x-6 gap-y-2">
-              {p.metrics.slice(0, 3).map((m) => (
-                <div key={m.label}>
-                  <dt className="sr-only">{m.label}</dt>
-                  <dd className="font-display text-xl text-ink tabular-nums leading-none">{m.value}</dd>
-                  <dd className="text-xs text-ink-faint mt-1">{m.label}</dd>
-                </div>
-              ))}
-            </dl>
-
-            <InkList items={p.technologies.slice(0, 5)} className="mt-auto pt-5" />
-            <span className="ink-link self-start mt-3 font-display text-sm text-ink">Enter the chamber →</span>
-          </button>
-        ))}
-      </div>
-
-      <NoteDialog open={!!selected} onClose={() => setSelected(null)} title={selected?.title ?? "Project"}>
+      <TermDialog open={!!selected} onClose={() => setSelected(null)} title={selected ? `~/projects/${selected.id}` : "project"}>
         {selected && (
           <article>
-            <h2 className="text-3xl">{selected.title}</h2>
-            <p className="text-ink-soft mt-2">{selected.description}</p>
+            <h2 className="text-2xl font-medium">{selected.title}</h2>
+            <p className="text-fg-dim mt-2">{selected.description}</p>
 
-            <dl className="mt-6 grid grid-cols-3 gap-4 rule-dashed pt-5">
+            <dl className="mt-6 grid grid-cols-3 gap-4 border-t border-rule pt-5">
               {selected.metrics.map((m) => (
                 <div key={m.label}>
-                  <dd className="font-display text-2xl text-ink tabular-nums">{m.value}</dd>
-                  <dt className="text-xs text-ink-faint">{m.label}</dt>
+                  <dd className="text-xl text-fg">{m.value}</dd>
+                  <dt className="text-xs text-fg-faint">{m.label}</dt>
                 </div>
               ))}
             </dl>
 
-            <h3 className="font-display text-sm mt-8 mb-2 tracking-wide">The problem</h3>
-            <p className="text-ink-soft">{selected.problem}</p>
+            <h3 className="text-xs uppercase tracking-[0.08em] text-fg-faint mt-8 mb-2"><span className="prompt">#</span> problem</h3>
+            <p className="text-fg-dim">{selected.problem}</p>
 
-            <h3 className="font-display text-sm mt-8 mb-2 tracking-wide">The plan of the room</h3>
-            <p className="text-ink-soft mb-4">{selected.architecture}</p>
+            <h3 className="text-xs uppercase tracking-[0.08em] text-fg-faint mt-8 mb-2"><span className="prompt">#</span> architecture</h3>
+            <p className="text-fg-dim mb-4">{selected.architecture}</p>
             {selected.architectureDiagram && (
-              <div className="map-frame p-3">
+              <div className="border border-rule rounded bg-bg p-3">
                 <Mermaid chart={selected.architectureDiagram} />
               </div>
             )}
 
-            <h3 className="font-display text-sm mt-8 mb-2 tracking-wide">Built with</h3>
-            <InkList items={selected.technologies} />
+            <h3 className="text-xs uppercase tracking-[0.08em] text-fg-faint mt-8 mb-2"><span className="prompt">#</span> stack</h3>
+            <p className="text-fg-dim">{selected.technologies.join(" · ")}</p>
 
             {(selected.link || selected.github) && (
               <div className="flex gap-3 mt-8">
                 {selected.link && (
-                  <a href={selected.link} target="_blank" rel="noopener noreferrer" className="btn btn-wax">
-                    <ExternalLink className="w-4 h-4" /> Visit
+                  <a href={selected.link} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                    <ExternalLink className="w-4 h-4" /> visit
                   </a>
                 )}
                 {selected.github && (
-                  <a href={selected.github} target="_blank" rel="noopener noreferrer" className="btn btn-ink">
-                    <Github className="w-4 h-4" /> Source
+                  <a href={selected.github} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+                    <Github className="w-4 h-4" /> source
                   </a>
                 )}
               </div>
             )}
           </article>
         )}
-      </NoteDialog>
+      </TermDialog>
     </Section>
   );
 }
