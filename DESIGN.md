@@ -1,55 +1,69 @@
-# Design: The Marauder's Map
+# Design: Editorial light
 
-The portfolio is the map. Aged parchment, iron-gall ink, hand-drawn corridors, labelled rooms, and footprints that walk the visitor between places. The interface recedes; the artifact leads.
+A quiet, numbers-led portfolio in the manner of a well-set magazine page. Warm off-white ground, near-black type, one burnt red-brown accent, generous whitespace. The content is the design; the interface recedes.
+
+Model: aanandmadhav.com for the home page, aaabadcode.com for the AI page.
 
 ## Modes
 
-- **Lumos (light, default):** parchment ground, dark ink. Mottled vignette + SVG grain on `body`.
-- **Nox (dark):** the map read by wandlight. Dark leather ground, parchment-coloured ink. Same grammar, inverted.
+- **Light (default):** warm off-white ground, near-black ink.
+- **Dark:** warm charcoal ground, bone-coloured ink, the accent lifted for contrast. Same grammar, inverted.
 
 Tokens live in `src/app/globals.css` as space-separated RGB triples, mapped in `tailwind.config.ts`.
 
-| Token | Role | Lumos | Nox |
+| Token | Role | Light | Dark |
 |---|---|---|---|
-| `--bg` | parchment ground | `#e9d9b3` | `#1a140d` |
-| `--bg-deep` | vignette edges | `#ceb786` | `#0a0704` |
-| `--paper` | lighter note / card | `#f1e5c6` | `#261d12` |
-| `--ink` | text, rules | `#2a1a0e` | `#e6d5ae` |
-| `--ink-soft` | secondary text | `#5c4330` | `#bea889` |
-| `--ink-faint` | hairlines, labels | `#8a6d50` | `#806a4c` |
-| `--rule` | frame strokes | `#6e543a` | `#7a6548` |
-| `--wax` | primary action (wax seal) | `#8f2a1f` | `#dc6854` |
-| `--wax-fg` | text on wax | `#f4e8cf` | `#1a140d` |
+| `--bg` | page ground | `#f4f1ec` | `#1c1a17` |
+| `--surface` | soft panel | `#ebe6de` | `#26231f` |
+| `--ink` | text, headings | `#1a1816` | `#ece7df` |
+| `--ink-soft` | secondary text, placeholders | `#5f5851` | `#b0a89d` |
+| `--ink-faint` | separators inside text ( · ) | `#8a8279` | `#7f786f` |
+| `--rule` | hairlines, borders | `#d9d2c7` | `#3a3631` |
+| `--accent` | the one accent: second half of a heading, focus ring, role title | `#9a3b1e` | `#de7c54` |
+| `--accent-fg` | text on accent | `#f4f1ec` | `#1c1a17` |
 
-Colour strategy: restrained. Wax red is the single accent and only ever marks an action or a role title.
+The accent is used for: the second sentence of a section heading, focus rings, the role title inside the experience dialog, the hover state of the primary button, and error text. Nowhere else.
 
 ## Type
 
-- Display: **IM Fell English SC** (`--font-display`) for headings, nav, buttons, labels.
-- Body: **Alegreya** (`--font-body`), 17px mobile / 18px desktop, 1.6 line height, max 66ch.
-- Handwriting: **Caveat** (`--font-hand`) for margin notes, role titles, quotes. Always rotated ~-2° when used as a note.
+- **Schibsted Grotesk** (`--font-sans`) for everything. Headings at weight 500, tracking -0.025em, line height 1.05. Body 17px / 1.6.
+- **JetBrains Mono** (`--font-mono`) only for the `.meta` class: dates, the clock, metric captions, panel titles. 12px, uppercase, 0.04em tracking. Never above a section heading.
+- Hero: three short words stacked, `clamp(3rem, 9vw, 6rem)`.
 
-All three via `next/font/google`, self-hosted at build.
+Both via `next/font/google`, self-hosted at build.
+
+## Structure (`src/app/page.tsx`)
+
+1. **Nav** (`navigation.tsx`): name + role left; Work / Experience / Skills / Ask AI; live Gurugram clock (`clock.tsx`, hidden below `lg`); theme toggle; "Get in touch". Mobile: full-screen menu, 44px rows, clock and CTA at the bottom.
+2. **Hero** (`sections/hero.tsx`): H1 "Pipelines. Platforms. Scale.", first sentence of `resume.summary`, "Start a conversation" opens the contact form, "Open to senior backend roles". Right column: `system-diagram.tsx`, an authored SVG of a Kafka pipeline with autoscaled workers. **Portrait slot:** there is no photo of Kaneshwar; the diagram occupies the slot. To add one later, replace `<SystemDiagram>` in `hero.tsx` with a `next/image` at the same column width.
+3. **Work** (`sections/work.tsx`): heading "Real load. Real numbers." Two `.panel`s for the two biggest numbers ($600K+, ~5M), then `.row`s for the other curated projects (name, metric, one line, ↗). Every panel and row opens the project `Dialog` with metrics, problem, architecture, Mermaid diagram, stack. Below: "Also built" from `resume.projects` and "On the side" from `freelanceProjects`.
+4. **Experience** (`sections/experience.tsx`): a ledger of rows (dates, company + role, one line, ↗) opening a `Dialog` with the achievements. Education as one line beneath.
+5. **Skills** (`sections/skills.tsx`): every group from `resume.skills` as plain lists in a 2 / 4 column grid. No chips.
+6. **AI CTA** (`sections/ai-cta.tsx`): one `.panel` linking to `/ai`.
+7. **Contact** (`sections/contact.tsx`) + **Footer**: "Let's build something.", primary button opens the form, email as ghost button, links list (GitHub, LinkedIn, Medium, Resume PDF), footer with the clock.
+
+## AI page (`src/app/ai/page.tsx`)
+
+Centered greeting, one round input, five chips (Me / Projects / Skills / Stack / Contact) that send preset questions. After the first message the page becomes the chat: user bubbles on the right in `--surface`, assistant answers as plain prose, input pinned to the bottom. All fetch / SSE / typewriter / error-report logic is unchanged from the previous design.
 
 ## Components (`src/components/ui`)
 
-- `Frame` / `.map-frame`: double-ruled box with corner flourishes. `paper` variant sits on `--paper`.
-- `Ribbon`: section label on a notched banner. Used by `Banner` (section titles).
-- `Trail`, `Footprint`: the signature. Footprints step in via `.footprint` + `.in-view` (CSS, 70ms stagger).
-- `Compass`, `WaxSeal`, `Corner`: single-stroke SVG ornaments in `currentColor`.
-- `.btn-wax` (primary) / `.btn-ink` (secondary): 44px min height, press scales to 0.97.
-- `.ink-link`: underline draws left-to-right on hover; `aria-current` keeps it drawn.
-- `InkList`: inline "a · b · c" lists in small caps. No chips.
-- `NoteDialog`: native `<dialog>` styled as a folded note.
-- `.field`: inputs, 16px so iOS does not zoom.
+- `.btn-primary` (ink on bg, accent on hover) / `.btn-ghost` (hairline border). 44px min height, hover lifts 2px, press scales to 0.97.
+- `.link`: 1px underline in `--rule`, accent on hover and when `aria-current="true"`.
+- `.row`: full-width ledger row, hairline above, `--surface` on hover.
+- `.panel`: `--surface`, 8px radius.
+- `.field`: 16px inputs, accent focus ring.
+- `Dialog`: native `<dialog>`, `.sheet` styling, Esc and backdrop close, 44px close button.
+- `Mermaid`: palette per theme; hard-coded `style` lines in diagrams are stripped.
+- `InlineList`: "a · b · c" text lists.
 
 ## Motion
 
-One authored moment: the oath types onto blank parchment, then the page is revealed (`MapReveal`, once per session). Footprints walk the corridors as they enter view. Hero text inks in once. Nothing else fades in on scroll. Easing: `--ease-out: cubic-bezier(0.23,1,0.32,1)`, `--ease-in-out: cubic-bezier(0.77,0,0.175,1)`. Reduced motion keeps opacity only.
+One authored moment: the three hero words rise out of a clipped box, 110ms apart (`.reveal`), and the sentence, CTA and diagram fade up after. Nothing else animates on scroll. Dialogs ease in over 220ms. Easing: `--ease-out: cubic-bezier(0.16, 1, 0.3, 1)`. All transitions list exact properties. `prefers-reduced-motion` removes the rise, the fades and the lifts.
 
 ## Rules
 
-- No kickers/eyebrows above headings; the ribbon is the heading.
-- No gradient text, no glass, no coloured left borders.
-- Icons only from lucide at one stroke weight; map ornaments are authored SVG.
-- Copy stays in the map's voice (corridors, chambers, owl post) but every fact comes from `src/data/resume.json`.
+- No kicker labels above headings. The `.meta` class marks data, never introduces a heading.
+- No gradient text, no glass, no coloured left borders thicker than 1px, no chip clouds.
+- Icons from lucide only, at one stroke weight; the hero diagram is authored SVG in `currentColor`.
+- Every fact comes from `src/data/resume.json` or `src/data/profile.ts`. No invented metrics, clients or quotes.

@@ -224,13 +224,13 @@ export const freelanceProjects: FreelanceProject[] = [
     description:
       "Built a modern, interactive portfolio website featuring an embedded AI assistant powered by RAG that answers questions about my experience and projects.",
     overview:
-      "Designed and developed a full-stack portfolio with Next.js 14, featuring dark/light themes, interactive animations, and an AI chatbot that uses RAG to answer questions about my background.",
+      "Designed and developed a full-stack portfolio with Next.js 14, featuring light and dark themes, restrained motion, and an AI chatbot that uses RAG to answer questions about my background.",
     deliverables: [
       "Next.js 14 App Router with TypeScript",
       "AI chatbot with Groq LLM and RAG pipeline",
-      "Marauder's Map theme with light and dark modes",
-      "Footprint timeline that walks the visitor through each role",
-      "Responsive design with custom cursor effects",
+      "Editorial light theme with a warm dark mode",
+      "Experience ledger and project dialogs with Mermaid architecture diagrams",
+      "Responsive design with a single authored hero reveal",
     ],
     technologies: ["Next.js", "TypeScript", "Tailwind CSS", "Groq API", "Mermaid"],
     outcome: "Unique portfolio showcasing technical skills with an AI-powered personal assistant",

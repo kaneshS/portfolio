@@ -1,6 +1,5 @@
 import { forwardRef, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
-import { Ribbon } from "./ornaments";
 
 interface SectionProps {
   id?: string;
@@ -16,14 +15,12 @@ export const Section = forwardRef<HTMLElement, SectionProps>(function Section({ 
   );
 });
 
-/* Section title drawn as a map label: ribbon + handwritten subtitle. */
-export function Banner({ title, note, className }: { title: string; note?: string; className?: string }) {
+/* Section heading: two short sentences, the second in the accent. No kicker. */
+export function Heading({ children, sub, className }: { children: ReactNode; sub?: string; className?: string }) {
   return (
-    <div className={cn("mb-12 md:mb-16 flex flex-col items-start gap-3", className)}>
-      <h2 className="text-3xl md:text-4xl">
-        <Ribbon className="text-[0.85em] md:text-[0.8em]">{title}</Ribbon>
-      </h2>
-      {note && <p className="margin-note ml-4">{note}</p>}
+    <div className={cn("mb-10 md:mb-14 max-w-[40ch]", className)}>
+      <h2 className="text-[clamp(2rem,4.5vw,3rem)]">{children}</h2>
+      {sub && <p className="mt-4 text-ink-soft text-lg">{sub}</p>}
     </div>
   );
 }

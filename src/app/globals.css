@@ -3,39 +3,34 @@
 @tailwind utilities;
 
 /*
-  The Marauder's Map
-  Light ("Lumos"): aged parchment, iron-gall ink, wax-seal red.
-  Dark  ("Nox"):   the map read by wandlight, parchment ink on dark leather.
+  Editorial light
+  Warm off-white ground, near-black ink, one burnt red-brown accent.
+  Dark mode: warm charcoal, same grammar.
 */
 @layer base {
   :root {
-    --bg: 233 217 179;
-    --bg-deep: 206 183 134;
-    --paper: 241 229 198;
-    --ink: 42 26 14;
-    --ink-soft: 92 67 48;
-    --ink-faint: 138 109 80;
-    --rule: 110 84 58;
-    --wax: 143 42 31;
-    --wax-fg: 244 232 207;
-    --gold: 156 122 44;
+    --bg: 244 241 236;
+    --surface: 235 230 222;
+    --ink: 26 24 22;
+    --ink-soft: 95 88 81;
+    --ink-faint: 138 130 121;
+    --rule: 217 210 199;
+    --accent: 154 59 30;
+    --accent-fg: 244 241 236;
 
-    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
     color-scheme: light;
   }
 
   .dark {
-    --bg: 26 20 13;
-    --bg-deep: 10 7 4;
-    --paper: 38 29 18;
-    --ink: 230 213 174;
-    --ink-soft: 190 168 137;
-    --ink-faint: 128 106 76;
-    --rule: 122 101 72;
-    --wax: 220 104 84;
-    --wax-fg: 26 20 13;
-    --gold: 201 164 86;
+    --bg: 28 26 23;
+    --surface: 38 35 31;
+    --ink: 236 231 223;
+    --ink-soft: 176 168 157;
+    --ink-faint: 127 120 111;
+    --rule: 58 54 49;
+    --accent: 222 124 84;
+    --accent-fg: 28 26 23;
     color-scheme: dark;
   }
 
@@ -53,28 +48,16 @@
     background-color: rgb(var(--bg));
     color: rgb(var(--ink));
     -webkit-font-smoothing: antialiased;
-    font-family: var(--font-body), Georgia, serif;
+    font-family: var(--font-sans), system-ui, sans-serif;
     font-size: 17px;
     line-height: 1.6;
-    /* parchment: vignette + mottling + grain */
-    background-image:
-      radial-gradient(ellipse at 50% 40%, rgb(var(--bg) / 0) 55%, rgb(var(--bg-deep) / 0.55) 100%),
-      radial-gradient(circle at 15% 20%, rgb(var(--bg-deep) / 0.18), transparent 35%),
-      radial-gradient(circle at 85% 70%, rgb(var(--bg-deep) / 0.16), transparent 30%),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.2 0 0 0 0 0.12 0 0 0 0 0.05 0 0 0 0.16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    background-attachment: fixed, fixed, fixed, scroll;
+    font-feature-settings: "ss01", "cv11";
   }
 
-  @media (min-width: 768px) {
-    body {
-      font-size: 18px;
-    }
-  }
-
-  h1, h2, h3, h4 {
-    font-family: var(--font-display), Georgia, serif;
-    font-weight: 400;
-    line-height: 1.1;
+  h1, h2, h3 {
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
     text-wrap: balance;
     scroll-margin-top: 6rem;
   }
@@ -84,13 +67,14 @@
   }
 
   ::selection {
-    background: rgb(var(--wax) / 0.25);
+    background: rgb(var(--accent) / 0.22);
     color: rgb(var(--ink));
   }
 
   :focus-visible {
-    outline: 2px solid rgb(var(--ink));
+    outline: 2px solid rgb(var(--accent));
     outline-offset: 3px;
+    border-radius: 2px;
   }
 
   button, a, [role="button"] {
@@ -98,158 +82,143 @@
   }
 
   input, textarea {
-    caret-color: rgb(var(--wax));
+    caret-color: rgb(var(--accent));
   }
 
-  /* Scrollbar in the palette */
   ::-webkit-scrollbar { width: 10px; height: 10px; }
-  ::-webkit-scrollbar-track { background: rgb(var(--bg-deep) / 0.35); }
+  ::-webkit-scrollbar-track { background: rgb(var(--bg)); }
   ::-webkit-scrollbar-thumb {
-    background: rgb(var(--ink-faint));
+    background: rgb(var(--rule));
     border: 2px solid rgb(var(--bg));
     border-radius: 6px;
   }
-  ::-webkit-scrollbar-thumb:hover { background: rgb(var(--ink-soft)); }
+  ::-webkit-scrollbar-thumb:hover { background: rgb(var(--ink-faint)); }
 
   dialog::backdrop {
-    background: rgb(var(--bg-deep) / 0.6);
-    backdrop-filter: blur(3px);
+    background: rgb(26 24 22 / 0.4);
   }
 }
 
 @layer components {
-  .font-display { font-family: var(--font-display), Georgia, serif; }
-  .font-hand { font-family: var(--font-hand), cursive; }
-
-  /* Double-ruled map frame with corner ornaments drawn by <Frame/> */
-  .map-frame {
-    position: relative;
-    border: 1px solid rgb(var(--rule) / 0.8);
-    box-shadow: inset 0 0 0 4px rgb(var(--bg)), inset 0 0 0 5px rgb(var(--rule) / 0.5);
-    padding: 1.5rem;
-  }
-  .map-frame.on-paper {
-    background: rgb(var(--paper));
-    box-shadow: inset 0 0 0 4px rgb(var(--paper)), inset 0 0 0 5px rgb(var(--rule) / 0.5),
-      0 1px 2px rgb(var(--bg-deep) / 0.4), 0 10px 24px -14px rgb(var(--ink) / 0.35);
+  /* Small mono labels: dates, clock, metric captions. Never above a heading. */
+  .meta {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: rgb(var(--ink-soft));
+    font-variant-numeric: tabular-nums;
   }
 
-  /* Hairline ink rules */
-  .rule-x { height: 1px; background: rgb(var(--rule) / 0.6); }
-  .rule-dashed { border-top: 1px dashed rgb(var(--rule) / 0.7); }
-
-  /* Buttons: wax seal (primary) and ink outline (secondary) */
   .btn {
     display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-    font-family: var(--font-display), Georgia, serif; font-size: 0.95rem; letter-spacing: 0.025em;
+    font-weight: 500; font-size: 0.95rem; letter-spacing: -0.005em;
     min-height: 44px;
-    padding: 0.6rem 1.4rem;
-    border-radius: 2px;
-    transition: transform 160ms var(--ease-out), background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+    padding: 0.65rem 1.25rem;
+    border-radius: 4px;
+    transition: transform 180ms var(--ease-out), background-color 180ms ease, color 180ms ease, border-color 180ms ease;
   }
   .btn:active { transform: scale(0.97); }
-  .btn-wax {
-    background: rgb(var(--wax));
-    color: rgb(var(--wax-fg));
-    box-shadow: 0 1px 0 rgb(var(--ink) / 0.3), 0 6px 14px -8px rgb(var(--wax) / 0.8);
+  .btn-primary {
+    background: rgb(var(--ink));
+    color: rgb(var(--bg));
   }
-  .btn-ink {
+  .btn-ghost {
     color: rgb(var(--ink));
-    box-shadow: inset 0 0 0 1px rgb(var(--ink)), inset 0 0 0 3px rgb(var(--bg)), inset 0 0 0 4px rgb(var(--ink) / 0.6);
+    border: 1px solid rgb(var(--rule));
+    background: transparent;
   }
   @media (hover: hover) and (pointer: fine) {
-    .btn-wax:hover { background: rgb(var(--wax) / 0.9); box-shadow: 0 1px 0 rgb(var(--ink) / 0.3), 0 8px 18px -8px rgb(var(--wax)); }
-    .btn-ink:hover { background: rgb(var(--ink) / 0.06); }
-    .lift { transition: transform 200ms var(--ease-out), box-shadow 200ms ease; }
+    .btn:hover { transform: translateY(-2px); }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary:hover { background: rgb(var(--accent)); color: rgb(var(--accent-fg)); }
+    .btn-ghost:hover { border-color: rgb(var(--ink)); }
+    .lift { transition: transform 200ms var(--ease-out); }
     .lift:hover { transform: translateY(-2px); }
+    .row:hover { background: rgb(var(--surface)); }
   }
 
-  /* Link with a drawn underline */
-  .ink-link {
-    background-image: linear-gradient(rgb(var(--wax)), rgb(var(--wax)));
-    background-size: 0% 1px;
-    background-repeat: no-repeat;
-    background-position: 0 100%;
-    transition: background-size 200ms var(--ease-out), color 160ms ease;
-    padding-bottom: 1px;
+  /* Text link: thin underline that moves to the accent on hover */
+  .link {
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    text-decoration-color: rgb(var(--rule));
+    transition: text-decoration-color 160ms ease, color 160ms ease;
   }
-  .ink-link:hover, .ink-link[aria-current="true"] { background-size: 100% 1px; }
+  .link:hover, .link[aria-current="true"] { text-decoration-color: rgb(var(--accent)); color: rgb(var(--ink)); }
 
-  /* Hand-written margin note */
-  .margin-note {
-    font-family: var(--font-hand), cursive; color: rgb(var(--ink-soft));
-    font-size: 1.25rem;
-    line-height: 1.2;
-    transform: rotate(-2deg);
+  /* Ledger row: full-width button with a hairline above */
+  .row {
+    display: grid;
+    width: 100%;
+    text-align: left;
+    border-top: 1px solid rgb(var(--rule));
+    padding: 1.1rem 0.5rem;
+    margin: 0 -0.5rem;
+    width: calc(100% + 1rem);
+    border-radius: 4px;
+    transition: background-color 160ms ease;
+  }
+  .row:active { transform: scale(0.995); }
+
+  .panel {
+    background: rgb(var(--surface));
+    border-radius: 8px;
+    padding: 1.75rem;
   }
 
-  /* Ink fields */
   .field {
-    width: 100%; background: rgb(var(--paper)); color: rgb(var(--ink));
+    width: 100%; background: rgb(var(--bg)); color: rgb(var(--ink));
     font-size: 16px;
     padding: 0.75rem 0.9rem;
-    border: 1px solid rgb(var(--rule) / 0.7);
-    border-radius: 2px;
+    border: 1px solid rgb(var(--rule));
+    border-radius: 4px;
     transition: border-color 160ms ease, box-shadow 160ms ease;
   }
-  .field::placeholder { color: rgb(var(--ink-faint)); }
-  .field:focus { outline: none; border-color: rgb(var(--ink)); box-shadow: 0 0 0 3px rgb(var(--wax) / 0.2); }
+  .field::placeholder { color: rgb(var(--ink-soft)); }
+  .field:focus { outline: none; border-color: rgb(var(--ink)); box-shadow: 0 0 0 3px rgb(var(--accent) / 0.18); }
   .field:disabled { opacity: 0.6; }
 
-  /* Ink-in entrance (used once: hero + reveal) */
-  .ink-in {
-    animation: ink-in 700ms var(--ease-out) both;
+  /* The one authored moment: hero lines rise out of a clipped box */
+  .reveal { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+  .reveal > span {
+    display: block;
+    transform: translateY(110%);
+    animation: rise 900ms var(--ease-out) forwards;
+    animation-delay: calc(var(--i, 0) * 110ms);
   }
-  .ink-in[data-delay="1"] { animation-delay: 120ms; }
-  .ink-in[data-delay="2"] { animation-delay: 240ms; }
-  .ink-in[data-delay="3"] { animation-delay: 360ms; }
-  .ink-in[data-delay="4"] { animation-delay: 480ms; }
-
-  /* Footprints: hidden until the trail is in view, then stepped in */
-  .footprint {
+  .fade-up {
     opacity: 0;
-    transform: scale(0.92);
-    transition: opacity 240ms var(--ease-out), transform 240ms var(--ease-out);
-    transition-delay: calc(var(--i, 0) * 70ms);
+    animation: fade-up 700ms var(--ease-out) forwards;
+    animation-delay: var(--d, 420ms);
   }
-  .in-view .footprint { opacity: 0.75; transform: scale(1); }
 
-  /* Dialog as a folded note */
-  .note-dialog {
-    background: rgb(var(--paper)); color: rgb(var(--ink));
-    border: 1px solid rgb(var(--rule) / 0.8);
-    box-shadow: inset 0 0 0 4px rgb(var(--paper)), inset 0 0 0 5px rgb(var(--rule) / 0.5), 0 10px 24px -14px rgb(var(--ink) / 0.35);
+  .sheet {
+    background: rgb(var(--bg)); color: rgb(var(--ink));
+    border: 1px solid rgb(var(--rule));
+    border-radius: 10px;
+    box-shadow: 0 24px 60px -24px rgb(0 0 0 / 0.35), 0 2px 8px -2px rgb(0 0 0 / 0.1);
     width: min(92vw, 44rem);
     max-height: min(88dvh, 60rem);
     padding: 0;
     overflow: hidden;
-    border-radius: 2px;
   }
-  .note-dialog[open] { animation: note-open 220ms var(--ease-out); }
+  .sheet[open] { animation: sheet-in 220ms var(--ease-out); }
 }
 
-@keyframes ink-in {
-  from { opacity: 0; transform: translateY(6px); filter: blur(3px); }
-  to { opacity: 1; transform: translateY(0); filter: blur(0); }
-}
-@keyframes note-open {
-  from { opacity: 0; transform: scale(0.96) translateY(6px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
-}
-@keyframes reveal-out {
-  to { clip-path: circle(0% at 50% 50%); }
-}
+@keyframes rise { to { transform: translateY(0); } }
+@keyframes fade-up { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes sheet-in { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: none; } }
 @keyframes blink { 50% { opacity: 0; } }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .ink-in { animation: fade-only 200ms ease both; }
-  .footprint { transition: opacity 200ms ease; transform: none; transition-delay: 0ms; }
-  .note-dialog[open] { animation: none; }
-  .btn:active, .lift:hover { transform: none; }
+  .reveal > span { transform: none; animation: none; }
+  .fade-up { opacity: 1; animation: none; }
+  .sheet[open] { animation: none; }
+  .btn:hover, .btn:active, .lift:hover, .row:active { transform: none; }
 }
-@keyframes fade-only { from { opacity: 0; } to { opacity: 1; } }
 
-/* Mermaid in ink */
 .mermaid-container svg { max-width: 100%; height: auto; }
-.mermaid-container .edgeLabel { font-family: var(--font-body), serif; }
+.mermaid-container .edgeLabel { font-family: var(--font-sans), system-ui, sans-serif; }

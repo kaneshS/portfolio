@@ -1,9 +1,9 @@
 import { cn } from "@/lib/utils";
 
-/* Inline inventory list: "Python · Go · Kafka" in small caps, no chips. */
-export function InkList({ items, className }: { items: string[]; className?: string }) {
+/* Inline list: "Python · Go · Kafka". No chips. */
+export function InlineList({ items, className }: { items: string[]; className?: string }) {
   return (
-    <p className={cn("font-display text-[0.85rem] text-ink-soft leading-relaxed", className)}>
+    <p className={cn("text-[0.9rem] text-ink-soft leading-relaxed", className)}>
       {items.map((item, i) => (
         <span key={item}>
           <span className="whitespace-nowrap">{item}</span>

@@ -5,8 +5,8 @@ import mermaid from "mermaid";
 import { useTheme } from "@/components/theme-provider";
 
 const palettes = {
-  light: { paper: "#f1e5c6", bg: "#e9d9b3", ink: "#2a1a0e", rule: "#6e543a", wax: "#8f2a1f" },
-  dark: { paper: "#261d12", bg: "#1a140d", ink: "#e6d5ae", rule: "#7a6548", wax: "#dc6854" },
+  light: { surface: "#ebe6de", bg: "#f4f1ec", ink: "#1a1816", rule: "#b8b0a5", accent: "#9a3b1e" },
+  dark: { surface: "#26231f", bg: "#1c1a17", ink: "#ece7df", rule: "#5a554e", accent: "#de7c54" },
 };
 
 export function Mermaid({ chart, className = "" }: { chart: string; className?: string }) {
@@ -20,16 +20,16 @@ export function Mermaid({ chart, className = "" }: { chart: string; className?: 
     mermaid.initialize({
       startOnLoad: false,
       theme: "base",
-      fontFamily: "var(--font-body), Georgia, serif",
+      fontFamily: "var(--font-sans), system-ui, sans-serif",
       themeVariables: {
-        primaryColor: p.paper,
+        primaryColor: p.surface,
         primaryTextColor: p.ink,
         primaryBorderColor: p.rule,
         lineColor: p.rule,
         secondaryColor: p.bg,
         tertiaryColor: p.bg,
         background: p.bg,
-        mainBkg: p.paper,
+        mainBkg: p.surface,
         nodeBorder: p.rule,
         clusterBkg: p.bg,
         clusterBorder: p.rule,
@@ -40,7 +40,7 @@ export function Mermaid({ chart, className = "" }: { chart: string; className?: 
       },
       flowchart: { htmlLabels: true, curve: "basis", padding: 12 },
     });
-    // strip hard-coded fills from older diagrams so the ink theme wins
+    // strip hard-coded fills from older diagrams so the palette wins
     const clean = chart.replace(/^\s*style .*$/gm, "");
     mermaid
       .render(`${idRef.current}-${theme}`, clean)
@@ -48,9 +48,9 @@ export function Mermaid({ chart, className = "" }: { chart: string; className?: 
         setSvg(r.svg);
         setError(null);
       })
-      .catch(() => setError("The diagram would not draw."));
+      .catch(() => setError("The diagram could not be rendered."));
   }, [chart, theme]);
 
-  if (error) return <p className="text-sm text-wax">{error}</p>;
+  if (error) return <p className="text-sm text-accent">{error}</p>;
   return <div className={`mermaid-container overflow-x-auto flex justify-center ${className}`} dangerouslySetInnerHTML={{ __html: svg }} />;
 }

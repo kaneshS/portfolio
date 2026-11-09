@@ -11,28 +11,22 @@ const config: Config = {
     extend: {
       colors: {
         bg: c("--bg"),
-        "bg-deep": c("--bg-deep"),
-        paper: c("--paper"),
+        surface: c("--surface"),
         ink: { DEFAULT: c("--ink"), soft: c("--ink-soft"), faint: c("--ink-faint") },
         rule: c("--rule"),
-        wax: { DEFAULT: c("--wax"), fg: c("--wax-fg") },
-        gold: c("--gold"),
-        // aliases so @tailwindcss/typography and any leftovers keep working
+        accent: { DEFAULT: c("--accent"), fg: c("--accent-fg") },
+        // aliases so @tailwindcss/typography keeps working
         background: c("--bg"),
         foreground: c("--ink"),
-        muted: { DEFAULT: c("--paper"), foreground: c("--ink-soft") },
+        muted: { DEFAULT: c("--surface"), foreground: c("--ink-soft") },
         border: c("--rule"),
-        accent: { DEFAULT: c("--wax"), foreground: c("--wax-fg") },
-        card: { DEFAULT: c("--paper"), foreground: c("--ink") },
       },
       fontFamily: {
-        display: ["var(--font-display)", "Georgia", "serif"],
-        body: ["var(--font-body)", "Georgia", "serif"],
-        hand: ["var(--font-hand)", "cursive"],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       transitionTimingFunction: {
-        out: "cubic-bezier(0.23, 1, 0.32, 1)",
-        "in-out": "cubic-bezier(0.77, 0, 0.175, 1)",
+        out: "cubic-bezier(0.16, 1, 0.3, 1)",
       },
     },
   },

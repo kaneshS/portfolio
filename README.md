@@ -7,11 +7,11 @@ A modern, interactive portfolio website featuring an embedded AI assistant power
 ## Features
 
 - **AI Assistant** - Embedded chatbot using Groq LLM with RAG pipeline for personalized responses
-- **Marauder's Map Theme** - Aged parchment and ink by day (Lumos), the map by wandlight at night (Nox). See [DESIGN.md](DESIGN.md)
-- **The Corridors** - Experience timeline with footprints that walk the corridor as you scroll
-- **Architecture Diagrams** - Mermaid.js flowcharts for project architectures
-- **One authored moment** - "I solemnly swear…" reveals the map on first visit; CSS-only motion elsewhere
-- **Responsive Design** - Mobile-first approach with custom cursor effects
+- **Editorial light theme** - Warm off-white ground, one burnt red-brown accent, numbers-led content; warm charcoal dark mode. See [DESIGN.md](DESIGN.md)
+- **Experience ledger** - Company, role, dates and one line per row; click for the full entry
+- **Architecture Diagrams** - Mermaid.js flowcharts for project architectures, restyled to the palette
+- **One authored moment** - The hero words rise once on load; CSS-only motion elsewhere
+- **Responsive Design** - Mobile-first, full-screen menu, 44px targets
 
 ## Tech Stack
 
@@ -21,7 +21,7 @@ A modern, interactive portfolio website featuring an embedded AI assistant power
 - **Animations:** CSS transitions and keyframes (no animation library)
 - **AI/LLM:** Groq API (GPT-OSS 120B)
 - **Diagrams:** Mermaid.js
-- **Fonts:** IM Fell English SC, Alegreya, Caveat (via next/font)
+- **Fonts:** Schibsted Grotesk, JetBrains Mono (via next/font)
 
 ## Getting Started
 
@@ -76,14 +76,12 @@ src/
 
 ## Sections
 
-- **Hero** - Introduction with animated text and CTAs
-- **About** - Personal narrative with experience stats
-- **Experience Journey** - Interactive S-curve timeline with footstep animations
-- **Projects** - Featured projects with architecture diagrams
-- **Freelance** - Freelance project showcase
-- **Skills** - Technical skills and expertise
-- **AI Assistant** - Chat interface for portfolio Q&A
-- **Contact** - Contact form and social links
+- **Hero** - Three-word headline, one sentence from the resume, contact CTA, authored SVG pipeline diagram
+- **Work** - The two biggest numbers as panels, the rest as rows; each opens a project dialog with a diagram
+- **Experience** - Ledger of roles with detail dialogs
+- **Skills** - Every resume skill group as plain lists
+- **AI Assistant** - Centered greeting with preset chips, then chat
+- **Contact** - Contact form, email, socials, resume PDF
 
 
 ## License
